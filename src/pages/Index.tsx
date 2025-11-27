@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import FloatingParticles from "@/components/FloatingParticles";
 import RaffleForm from "@/components/RaffleForm";
 import { usePerformanceLogger } from "@/hooks/use-performance-logger";
-
 const Index = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -90,11 +89,7 @@ const Index = () => {
           
           {/* Banner Image with rounded top corners */}
           <div className="relative">
-            <img
-              src="/menorah-at-the-falls-banner.jpg"
-              alt="Menorah at the Falls"
-              className="w-full h-auto object-cover rounded-t-3xl"
-            />
+            <img src="/menorah-at-the-falls-banner.jpg" alt="Menorah at the Falls" className="w-full h-auto object-cover rounded-t-3xl" />
           </div>
           
           {/* Date/Time Line */}
@@ -110,11 +105,7 @@ const Index = () => {
                 <div className="relative mb-4">
                   <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-amber-400/60 via-gold/40 to-amber-500/60 blur-md opacity-70" />
                   <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full border-2 border-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.4)] overflow-hidden">
-                    <img
-                      src="/Giant-Menorah-Lighting.jpg"
-                      alt="Giant Menorah Lighting"
-                      className="w-full h-full object-cover"
-                    />
+                    <img src="/Giant-Menorah-Lighting.jpg" alt="Giant Menorah Lighting" className="w-full h-full object-cover" />
                   </div>
                 </div>
                 <h3 className="text-lg font-semibold text-gold drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] mb-1">
@@ -130,11 +121,7 @@ const Index = () => {
                 <div className="relative mb-4">
                   <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-amber-400/60 via-gold/40 to-amber-500/60 blur-md opacity-70" />
                   <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full border-2 border-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.4)] overflow-hidden">
-                    <img
-                      src="/Fire-Truck-Gelt-Drop.jpg"
-                      alt="Fire Truck Gelt Drop"
-                      className="w-full h-full object-cover"
-                    />
+                    <img src="/Fire-Truck-Gelt-Drop.jpg" alt="Fire Truck Gelt Drop" className="w-full h-full object-cover" />
                   </div>
                 </div>
                 <h3 className="text-lg font-semibold text-gold drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] mb-1">
@@ -150,11 +137,7 @@ const Index = () => {
                 <div className="relative mb-4">
                   <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-amber-400/60 via-gold/40 to-amber-500/60 blur-md opacity-70" />
                   <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full border-2 border-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.4)] overflow-hidden">
-                    <img
-                      src="/Fire-Show.jpg"
-                      alt="Fire Show"
-                      className="w-full h-full object-cover"
-                    />
+                    <img src="/Fire-Show.jpg" alt="Fire Show" className="w-full h-full object-cover" />
                   </div>
                 </div>
                 <h3 className="text-lg font-semibold text-gold drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] mb-1">
@@ -276,9 +259,7 @@ const Index = () => {
         {/* Footer */}
         <div className="mt-16 text-center animate-fade-in space-y-6 py-6 content-offscreen">
           {/* Location */}
-          <p className="text-lg text-gold font-light tracking-wide drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]">
-            The event will take place at 203 S Union St, Traverse City, MI 49684
-          </p>
+          
           
           {/* Powered by Techrupt */}
           <div className="mb-4">
