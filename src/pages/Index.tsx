@@ -1,18 +1,8 @@
 import { useEffect, useState } from "react";
 import FloatingParticles from "@/components/FloatingParticles";
 import RaffleForm from "@/components/RaffleForm";
-import MenorahCandles from "@/components/MenorahCandles";
 import { usePerformanceLogger } from "@/hooks/use-performance-logger";
-const GoldenFlameIcon = ({
-  className = ""
-}: {
-  className?: string;
-}) => <span className="inline-flex items-center justify-center">
-    <svg className={`golden-flame-icon ${className}`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-      <path d="M12 21c-3.55 0-6.5-2.86-6.5-6.22 0-2.44 1.32-4.04 2.82-5.63 1.25-1.31 2.41-2.7 2.41-4.47 1.73 1.43 3.3 3.45 3.66 5.45 1.57.93 3.11 2.61 3.11 4.94C17.5 18.14 15.08 21 12 21Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M12 17.5c-1.6 0-2.9-1.26-2.9-2.86 0-1.02.54-1.93 1.34-2.68.63-.6 1.2-1.29 1.2-2.27 1.34.97 2.3 2.44 2.3 3.92 0 1.62-1.28 2.89-2.94 2.89Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  </span>;
+
 const Index = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -90,42 +80,7 @@ const Index = () => {
 
       {/* Content */}
       <div className="relative z-10 container max-w-2xl mx-auto px-4 py-12 md:py-16">
-        {/* Hosted by banner */}
-        <div className="text-center mb-6 animate-fade-in">
-          <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-gradient-to-r from-gold/10 via-amber/10 to-gold/10 border border-gold/30 backdrop-blur-sm">
-            <GoldenFlameIcon className="w-5 h-5 md:w-6 md:h-6" />
-            <span className="text-sm font-medium text-foreground/90 tracking-wider">HOSTED BY CHABAD OF TRAVERSE CITY</span>
-            <GoldenFlameIcon className="w-5 h-5 md:w-6 md:h-6" />
-          </div>
-        </div>
-
-
-        {/* Hero Section */}
-        <div className="hero-section text-center mb-12 animate-fade-in">
-          {/* Menorah with Blended Candle Effect */}
-          <div className="mb-8 flex justify-center">
-            <div className={`relative w-full max-w-[400px] md:max-w-[500px] ${!isMobile && !prefersReducedMotion ? 'animate-float' : ''}`}>
-              <MenorahCandles isMobile={isMobile} prefersReducedMotion={prefersReducedMotion} />
-            </div>
-          </div>
-
-          {/* Title with Golden Gradient */}
-          <h1 className={`text-4xl md:text-6xl font-bold mb-4 text-gold-gradient bg-[length:200%_auto] drop-shadow-[0_0_20px_rgba(255,215,0,0.5)] ${!isMobile && !prefersReducedMotion ? 'animate-shimmer' : ''}`}>
-            Menorah in The Square
-          </h1>
-
-          {/* Date and Time */}
-          <p className={`text-2xl md:text-3xl text-gold-gradient font-medium tracking-wide bg-[length:200%_auto] my-4 md:my-6 ${!isMobile && !prefersReducedMotion ? 'animate-shimmer' : ''}`}>
-            Dec 21 • 5:00 pm
-          </p>
-
-          {/* Subtitle */}
-          <p className={`text-xl md:text-2xl text-gold-gradient font-light tracking-wide bg-[length:200%_auto] ${!isMobile && !prefersReducedMotion ? 'animate-shimmer' : ''}`}>
-            Together We Light the Square.
-          </p>
-        </div>
-
-        {/* Form Card with Glassmorphism */}
+        {/* Combined Banner + Form Card */}
         <div className="relative animate-fade-in animation-delay-200">
           {/* Multiple glow layers behind card for depth - simplified on mobile */}
           {isMobile ? <div className="absolute -inset-4 bg-gradient-to-br from-gold/20 via-amber/15 to-gold/15 rounded-3xl opacity-30 mobile-glow-static" /> : <>
@@ -133,8 +88,177 @@ const Index = () => {
               <div className="absolute -inset-4 bg-gradient-to-br from-gold/20 via-amber/15 to-transparent rounded-3xl blur-2xl opacity-30" />
             </>}
           
-          {/* Main Glass Card */}
-          <div className="relative glass-card glass-card-mobile rounded-3xl shadow-2xl shadow-mobile p-8 md:p-12 border border-gold/20">
+          {/* Banner Image with rounded top corners */}
+          <div className="relative">
+            <img
+              src="/menorah-at-the-falls-banner.jpg"
+              alt="Menorah at the Falls"
+              className="w-full h-auto object-cover rounded-t-3xl"
+            />
+          </div>
+          
+          {/* Date/Time Line */}
+          <p className="text-center text-2xl font-medium text-gold py-4 bg-gradient-to-b from-black/20 to-transparent">
+            Sunday, December 14 · 5:00 PM
+          </p>
+          
+          {/* Event Highlights Section */}
+          <div className="py-8 px-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
+              {/* Giant Menorah Lighting */}
+              <div className="flex flex-col items-center text-center">
+                <div className="relative mb-4">
+                  <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-amber-400/60 via-gold/40 to-amber-500/60 blur-md opacity-70" />
+                  <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full border-2 border-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.4)] overflow-hidden">
+                    <img
+                      src="/Giant-Menorah-Lighting.jpg"
+                      alt="Giant Menorah Lighting"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+                <h3 className="text-lg font-semibold text-gold drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] mb-1">
+                  Giant Menorah Lighting
+                </h3>
+                <p className="text-sm text-amber-100/80">
+                  Watch the giant menorah light up Riverside Park!
+                </p>
+              </div>
+              
+              {/* Fire Truck Gelt Drop */}
+              <div className="flex flex-col items-center text-center">
+                <div className="relative mb-4">
+                  <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-amber-400/60 via-gold/40 to-amber-500/60 blur-md opacity-70" />
+                  <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full border-2 border-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.4)] overflow-hidden">
+                    <img
+                      src="/Fire-Truck-Gelt-Drop.jpg"
+                      alt="Fire Truck Gelt Drop"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+                <h3 className="text-lg font-semibold text-gold drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] mb-1">
+                  Fire Truck Gelt Drop
+                </h3>
+                <p className="text-sm text-amber-100/80">
+                  Chanukah treats dropped from a real fire truck!
+                </p>
+              </div>
+              
+              {/* Fire Show */}
+              <div className="flex flex-col items-center text-center">
+                <div className="relative mb-4">
+                  <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-amber-400/60 via-gold/40 to-amber-500/60 blur-md opacity-70" />
+                  <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full border-2 border-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.4)] overflow-hidden">
+                    <img
+                      src="/Fire-Show.jpg"
+                      alt="Fire Show"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+                <h3 className="text-lg font-semibold text-gold drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] mb-1">
+                  Fire Show
+                </h3>
+                <p className="text-sm text-amber-100/80">
+                  A thrilling fire performance to kick off the night.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Event Schedule Section */}
+          <div className="py-6">
+            {/* Section Header */}
+            <div className="text-center mb-6">
+              <h2 className="text-xl md:text-2xl font-semibold text-gold drop-shadow-[0_0_15px_rgba(255,215,0,0.4)]">
+                ✨ Event Schedule ✨
+              </h2>
+            </div>
+            
+            {/* Two Column Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              {/* Block 1: Riverside Park */}
+              <div className="relative group">
+                {/* Subtle glow on hover */}
+                <div className="absolute -inset-0.5 bg-gradient-to-br from-amber-400/20 via-gold/10 to-amber-500/20 rounded-xl blur-sm opacity-60 group-hover:opacity-80 transition-opacity" />
+                
+                <div className="relative bg-gradient-to-br from-black/50 via-black/40 to-black/50 backdrop-blur-sm rounded-xl border border-gold/20 p-5 md:p-6 h-full">
+                  {/* Inner glow accent */}
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-amber-500/5 via-transparent to-gold/5 pointer-events-none" />
+                  
+                  <div className="relative z-10">
+                    {/* Subtitle */}
+                    <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-amber-300/80 mb-4 font-medium">
+                      The event begins at Riverside Park
+                    </p>
+                    
+                    {/* Event Times */}
+                    <div className="space-y-3 mb-5">
+                      <p className="text-amber-100/85 text-sm md:text-base leading-relaxed">
+                        <span className="text-gold">5pm:</span> Enjoy a fire show and hot drinks. 🔥
+                      </p>
+                      <p className="text-amber-100/85 text-sm md:text-base leading-relaxed">
+                        <span className="text-gold">5:30pm:</span> Menorah lighting and a Gelt Drop, with Chanukah treats raining down from a fire truck! 🚒
+                      </p>
+                    </div>
+                    
+                    {/* Location */}
+                    <div className="flex items-center gap-2 pt-3 border-t border-gold/10">
+                      <p className="text-[11px] md:text-xs text-amber-200/60 tracking-wide">
+                        📍 Riverside Park, Chagrin Falls Main Street
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Block 2: Chabad at the Falls */}
+              <div className="relative group">
+                {/* Subtle glow on hover */}
+                <div className="absolute -inset-0.5 bg-gradient-to-br from-amber-400/20 via-gold/10 to-amber-500/20 rounded-xl blur-sm opacity-60 group-hover:opacity-80 transition-opacity" />
+                
+                <div className="relative bg-gradient-to-br from-black/50 via-black/40 to-black/50 backdrop-blur-sm rounded-xl border border-gold/20 p-5 md:p-6 h-full">
+                  {/* Inner glow accent */}
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-amber-500/5 via-transparent to-gold/5 pointer-events-none" />
+                  
+                  <div className="relative z-10">
+                    {/* Subtitle */}
+                    <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-amber-300/80 mb-4 font-medium">
+                      After the lighting, the celebration continues
+                    </p>
+                    
+                    {/* Description */}
+                    <div className="space-y-3 mb-5">
+                      <p className="text-amber-100/85 text-sm md:text-base leading-relaxed">
+                        After the lighting, the celebration continues up the street at Chabad at the Falls.
+                      </p>
+                      <p className="text-amber-100/85 text-sm md:text-base leading-relaxed">
+                        Hot latkes and donuts, children's activities, and more Chanukah fun for all ages.
+                      </p>
+                    </div>
+                    
+                    {/* Location */}
+                    <div className="flex items-center gap-2 pt-3 border-t border-gold/10">
+                      <p className="text-[11px] md:text-xs text-amber-200/60 tracking-wide">
+                        📍 Chabad at the Falls | 100 N Main Street, Suite 100
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Decorative sparkle divider */}
+            <div className="flex items-center justify-center gap-3 mt-6">
+              <div className="h-px w-16 bg-gradient-to-r from-transparent to-gold/30" />
+              <span className="text-gold/60 text-sm">✦</span>
+              <div className="h-px w-16 bg-gradient-to-l from-transparent to-gold/30" />
+            </div>
+          </div>
+          
+          {/* Main Glass Card with rounded bottom corners */}
+          <div className="relative glass-card glass-card-mobile rounded-b-3xl shadow-2xl shadow-mobile p-8 md:p-12 border border-gold/20 border-t-0">
             {/* Subtle inner glow */}
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-gold/5 via-transparent to-amber/5 pointer-events-none" />
             

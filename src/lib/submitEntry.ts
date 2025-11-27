@@ -6,14 +6,10 @@ export interface MenorahEntryData {
   email: string;
   areaCode: string;
   phoneNumber: string;
-  numberOfAdults: string;
-  numberOfChildren: string;
-  enjoyReason: string;
-  otherEnjoyReason?: string;
-  sponsorships: string[];
-  cansQuantity: string;
-  comments?: string;
-  emailUpdatesOptIn: boolean;
+  numberOfParticipants: string;
+  joiningLocations: string[];
+  selectedDonations: string[];
+  otherDonation: string;
 }
 
 export interface MenorahEntryResponse {
@@ -65,56 +61,30 @@ export async function submitEntry(
       };
     }
 
-    if (!formData.enjoyReason) {
+    if (!formData.joiningLocations || formData.joiningLocations.length === 0) {
       return {
         success: false,
-        error: "Please select a reason for enjoying this event",
+        error: "Please select at least one location you'll be joining",
       };
     }
 
-    // Validate "other" reason if selected
-    if (
-      formData.enjoyReason === "other" &&
-      (!formData.otherEnjoyReason || !formData.otherEnjoyReason.trim())
-    ) {
-      return {
-        success: false,
-        error: "Please tell us why you enjoy this event",
-      };
-    }
-
-    // Calculate sponsorship amounts
-    const sponsorshipOptions = [
-      { id: "doughnut", label: "DOUGHNUT SPONSOR", amount: 36 },
-      { id: "doughnut-gold", label: "DOUGHNUT GOLD SPONSOR", amount: 72 },
-      { id: "doughnut-platinum", label: "DOUGHNUT PLATINUM SPONSOR", amount: 108 },
-      { id: "menorah", label: "MENORAH SPONSOR", amount: 180 },
-      { id: "menorah-gold", label: "MENORAH GOLD SPONSOR", amount: 360 },
-      { id: "menorah-platinum", label: "MENORAH PLATINUM SPONSOR", amount: 540 },
+    // Donation options (kept for reference/validation if needed)
+    const optionalDonationOptions = [
+      { id: 'dreidel', label: 'DREIDEL', amount: 36 },
+      { id: 'candle', label: 'CANDLE', amount: 54 },
+      { id: 'menorah', label: 'MENORAH', amount: 180 },
+      { id: 'flame', label: 'FLAME', amount: 360 },
     ];
 
-    const wantsToDonate = formData.sponsorships.length > 0 || formData.cansQuantity !== "";
-
-    // Calculate cans amount
-    const canOptions = [
-      { quantity: 1, label: "1 CAN – $4", amount: 4 },
-      { quantity: 2, label: "2 CAN – $8", amount: 8 },
-      { quantity: 4, label: "4 CANS – $16", amount: 16 },
-      { quantity: 6, label: "6 CANS – $24", amount: 24 },
-      { quantity: 8, label: "8 CANS – $32", amount: 32 },
-      { quantity: 10, label: "10 CANS – $40", amount: 40 },
-      { quantity: 15, label: "15 CANS – $60", amount: 60 },
-      { quantity: 20, label: "20 CANS – $80", amount: 80 },
-      { quantity: 30, label: "30 CANS – $120", amount: 120 },
-      { quantity: 40, label: "40 CANS – $160", amount: 160 },
-      { quantity: 50, label: "50 CANS – $200", amount: 200 },
-      { quantity: 100, label: "100 CANS – $400", amount: 400 },
+    const eventSponsorOptions = [
+      { id: 'nightly', label: 'ONE NIGHT OF NIGHTLY LIGHTINGS', amount: 540 },
+      { id: 'coSponsor', label: 'MENORAH AT THE FALLS CO-SPONSOR', amount: 1800 },
     ];
 
-    const selectedCanOption = canOptions.find(
-      (option) => option.label === formData.cansQuantity
-    );
-    const cansQuantityValue = selectedCanOption?.quantity || 0;
+    // Parse other donation amount
+    const otherDonationAmount = parseFloat(formData.otherDonation) || 0;
+
+    const wantsToDonate = formData.selectedDonations.length > 0 || otherDonationAmount > 0;
 
     // Generate verification token
     const verificationToken = generateVerificationToken();
@@ -133,14 +103,10 @@ export async function submitEntry(
       area_code: formData.areaCode.trim() || null,
       phone_number: formData.phoneNumber ? formData.phoneNumber.replace(/\D/g, '').trim() : null,
       full_phone: fullPhone,
-      number_of_adults: parseInt(formData.numberOfAdults, 10),
-      number_of_children: formData.numberOfChildren ? parseInt(formData.numberOfChildren, 10) : 0,
-      reason: formData.enjoyReason,
-      reason_other: formData.otherEnjoyReason?.trim() || null,
-      sponsorships: formData.sponsorships,
-      cans_quantity: cansQuantityValue,
-      comments: formData.comments?.trim() || null,
-      email_updates_opt_in: formData.emailUpdatesOptIn,
+      number_of_participants: parseInt(formData.numberOfParticipants, 10),
+      joining_locations: formData.joiningLocations,
+      selected_donations: formData.selectedDonations,
+      other_donation: otherDonationAmount > 0 ? otherDonationAmount : null,
       wants_to_donate: wantsToDonate,
       verification_token: verificationToken,
       verification_sent_at: new Date().toISOString(),
