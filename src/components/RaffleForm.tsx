@@ -718,11 +718,11 @@ const RaffleForm = () => {
           </div>
 
         {/* Chanukah Flyer Image */}
-        <div className="pt-6 mt-4">
+        <div className="pt-6 mt-4 flex justify-center">
           <img
-            src="/chanukah flyer.jpg"
+            src="/chanukah-flyer.jpg"
             alt="Chanukah at the Falls Event Flyer"
-            className="w-full rounded-2xl shadow-[0_0_30px_rgba(255,215,0,0.2)] object-contain"
+            className="w-full max-w-3xl mx-auto rounded-3xl shadow-lg shadow-gold/20"
           />
         </div>
 
@@ -741,13 +741,11 @@ const RaffleForm = () => {
         </div>
 
         {/* Bell St Menorah Schedule Image */}
-        <div className="pt-6 mt-4">
-          <img
-            src="/bell st menorah schedule.jpg"
-            alt="Nightly Menorah Lighting Schedule"
-            className="w-full rounded-2xl shadow-[0_0_30px_rgba(255,215,0,0.2)] object-contain"
-          />
-        </div>
+        <img
+          src="/bell-st-menorah-schedule.jpg"
+          alt="Bell St Menorah Schedule"
+          className="w-full max-w-3xl mx-auto rounded-3xl shadow-lg my-10"
+        />
       </div>
 
       {/* Submit */}
