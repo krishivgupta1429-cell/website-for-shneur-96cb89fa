@@ -678,7 +678,7 @@ const RaffleForm = () => {
                 Other Donation
               </h4>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gold font-semibold text-lg pointer-events-none">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-amber-300 font-semibold text-lg pointer-events-none z-10">
                   $
                 </span>
                 <Input
