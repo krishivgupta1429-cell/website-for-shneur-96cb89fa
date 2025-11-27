@@ -21,7 +21,7 @@ const RaffleForm = () => {
     email: "",
     phoneNumber: "",
     numberOfParticipants: "",
-    joiningLocations: [] as string[],
+    joiningLocations: ['riverside'] as string[],
     selectedDonations: [] as string[],
     otherDonation: "",
   });
