@@ -171,10 +171,10 @@ const Index = () => {
                   <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-amber-500/5 via-transparent to-gold/5 pointer-events-none" />
                   
                   <div className="relative z-10">
-                    {/* Subtitle */}
-                    <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-amber-300/80 mb-4 font-medium">
-                      The event begins at Riverside Park
-                    </p>
+                    {/* Heading */}
+                    <h3 className="text-lg md:text-xl font-bold uppercase tracking-[0.15em] text-gold drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] mb-4">
+                      THE EVENT BEGINS AT RIVERSIDE PARK
+                    </h3>
                     
                     {/* Event Times */}
                     <div className="space-y-3 mb-5">
@@ -206,10 +206,10 @@ const Index = () => {
                   <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-amber-500/5 via-transparent to-gold/5 pointer-events-none" />
                   
                   <div className="relative z-10">
-                    {/* Subtitle */}
-                    <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-amber-300/80 mb-4 font-medium">
-                      After the lighting, the celebration continues
-                    </p>
+                    {/* Heading */}
+                    <h3 className="text-lg md:text-xl font-bold uppercase tracking-[0.15em] text-gold drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] mb-4">
+                      THE PARTY CONTINUES AT CHABAD
+                    </h3>
                     
                     {/* Description */}
                     <div className="space-y-3 mb-5">
@@ -245,9 +245,11 @@ const Index = () => {
             {/* Subtle inner glow */}
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-gold/5 via-transparent to-amber/5 pointer-events-none" />
             
-            {/* Decorative top accent */}
-            <div className="flex justify-center mb-8 relative z-10">
-              <div className={`text-3xl ${!isMobile && !prefersReducedMotion ? 'animate-candle-flicker' : ''}`}>✨</div>
+            {/* Register Here Heading */}
+            <div className="text-center mb-8 relative z-10">
+              <h2 className="text-xl md:text-2xl font-bold uppercase tracking-[0.15em] text-gold drop-shadow-[0_0_12px_rgba(255,215,0,0.4)]">
+                REGISTER HERE
+              </h2>
             </div>
 
             <div className="relative z-10">

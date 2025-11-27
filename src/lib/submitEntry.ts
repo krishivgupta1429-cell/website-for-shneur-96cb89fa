@@ -4,7 +4,6 @@ import { validateEmail } from "./emailValidation";
 export interface MenorahEntryData {
   fullName: string;
   email: string;
-  areaCode: string;
   phoneNumber: string;
   numberOfParticipants: string;
   joiningLocations: string[];
@@ -89,20 +88,16 @@ export async function submitEntry(
     // Generate verification token
     const verificationToken = generateVerificationToken();
 
-    // Generate full phone in E.164 format if both parts are provided
-    // Strip formatting from phone number (in case of US format)
-    const cleanedPhoneNumber = formData.phoneNumber ? formData.phoneNumber.replace(/\D/g, '') : '';
-    const fullPhone = formData.areaCode && cleanedPhoneNumber 
-      ? `${formData.areaCode.trim()}${cleanedPhoneNumber}`
-      : null;
+    // Phone number (store as-is, no formatting required)
+    const phoneNumber = formData.phoneNumber ? formData.phoneNumber.trim() : null;
 
     // Prepare the database entry
     const entry = {
       full_name: formData.fullName.trim(),
       email: formData.email.trim().toLowerCase(),
-      area_code: formData.areaCode.trim() || null,
-      phone_number: formData.phoneNumber ? formData.phoneNumber.replace(/\D/g, '').trim() : null,
-      full_phone: fullPhone,
+      area_code: null,
+      phone_number: phoneNumber,
+      full_phone: phoneNumber,
       number_of_participants: parseInt(formData.numberOfParticipants, 10),
       joining_locations: formData.joiningLocations,
       selected_donations: formData.selectedDonations,

@@ -19,7 +19,6 @@ const RaffleForm = () => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
-    areaCode: "+1",
     phoneNumber: "",
     numberOfParticipants: "",
     joiningLocations: [] as string[],
@@ -28,19 +27,7 @@ const RaffleForm = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [emailError, setEmailError] = useState<string>("");
-  const [areaCodeError, setAreaCodeError] = useState<string>("");
   const [phoneNumberError, setPhoneNumberError] = useState<string>("");
-
-  // Phone format mapping for different countries
-  const phoneFormats: Record<string, { placeholder: string; digits: number }> = {
-    '+1': { placeholder: '(123) 456-7890', digits: 10 },    // US/Canada
-    '+44': { placeholder: '7123 456789', digits: 10 },    // UK
-    '+91': { placeholder: '98765 43210', digits: 10 },    // India
-    '+61': { placeholder: '412 345 678', digits: 9 },     // Australia
-  };
-
-  // Get current format based on area code
-  const currentFormat = phoneFormats[formData.areaCode] || { placeholder: 'Phone number', digits: 15 };
 
   // Donation options
   const optionalDonationOptions = [
@@ -116,65 +103,10 @@ const RaffleForm = () => {
     }
   };
 
-  // Handle area code validation
-  const handleAreaCodeChange = (value: string) => {
-    // Only allow + at the beginning and digits, max 4 characters
-    const cleaned = value.replace(/[^\d+]/g, '');
-    if (cleaned.startsWith('+') || cleaned === '') {
-      const areaCode = cleaned.slice(0, 4);
-      setFormData({ ...formData, areaCode });
-      
-      if (areaCode && areaCode.length < 2) {
-        setAreaCodeError("Area code must be at least 2 characters");
-      } else if (areaCode && !areaCode.startsWith('+')) {
-        setAreaCodeError("Area code must start with +");
-      } else {
-        setAreaCodeError("");
-      }
-      
-      // Clear phone number error when area code changes (format may have changed)
-      if (phoneNumberError) {
-        setPhoneNumberError("");
-      }
-    }
-  };
-
-  // Handle phone number validation with US formatting
+  // Handle phone number change (no formatting)
   const handlePhoneNumberChange = (value: string) => {
-    // Strip all non-digit characters
-    const digitsOnly = value.replace(/\D/g, '');
-    
-    // For US/Canada (+1), limit to exactly 10 digits and format as (XXX) XXX-XXXX
-    if (formData.areaCode === '+1') {
-      // Limit to 10 digits max
-      const limited = digitsOnly.slice(0, 10);
-      
-      let formatted = limited;
-      const len = limited.length;
-      
-      if (len <= 2) {
-        // 1-2 digits: show as-is (e.g., "4", "43")
-        formatted = limited;
-      } else if (len === 3) {
-        // 3 digits: add parentheses (e.g., "(434)")
-        formatted = `(${limited})`;
-      } else if (len <= 6) {
-        // 4-6 digits: (XXX) X... (e.g., "(434) 3", "(434) 334")
-        formatted = `(${limited.slice(0, 3)}) ${limited.slice(3)}`;
-      } else {
-        // 7-10 digits: (XXX) XXX-X... (e.g., "(434) 334-3", "(434) 334-3456")
-        formatted = `(${limited.slice(0, 3)}) ${limited.slice(3, 6)}-${limited.slice(6)}`;
-      }
-      
-      setFormData({ ...formData, phoneNumber: formatted });
-      setPhoneNumberError("");
-    } else {
-      // For other countries, enforce max length based on current format
-      if (digitsOnly.length <= currentFormat.digits) {
-        setFormData({ ...formData, phoneNumber: digitsOnly });
-        setPhoneNumberError("");
-      }
-    }
+    setFormData({ ...formData, phoneNumber: value });
+    setPhoneNumberError("");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -201,63 +133,12 @@ const RaffleForm = () => {
       return;
     }
 
-    // Phone validation with format-specific rules
-    if (formData.phoneNumber) {
-      const cleanedNumber = formData.phoneNumber.replace(/\D/g, "");
-      
-      // Special validation for US numbers
-      if (formData.areaCode === '+1') {
-        if (cleanedNumber.length !== 10) {
-          setPhoneNumberError("Please enter a valid 10-digit US phone number.");
-          toast.error("Invalid Phone Number", {
-            description: "Please enter a valid 10-digit US phone number.",
-          });
-          return;
-        }
-      } else {
-        // Validate based on current format for other countries
-        if (cleanedNumber.length < 6) {
-          setPhoneNumberError("Phone number must be at least 6 digits");
-          toast.error("Invalid Phone Number", {
-            description: "Phone number must be at least 6 digits",
-          });
-          return;
-        }
-        
-        if (cleanedNumber.length > currentFormat.digits) {
-          setPhoneNumberError(`Phone number must be at most ${currentFormat.digits} digits for ${formData.areaCode}`);
-          toast.error("Invalid Phone Number", {
-            description: `Phone number must be at most ${currentFormat.digits} digits for ${formData.areaCode}`,
-          });
-          return;
-        }
-      }
-    }
-
-    // Validate area code if provided
-    if (formData.areaCode && !formData.areaCode.startsWith('+')) {
-      setAreaCodeError("Area code must start with +");
-      toast.error("Invalid Area Code", {
-        description: "Area code must start with + (e.g., +1, +44, +91)",
+    // Phone validation (optional but if provided, should have some content)
+    if (formData.phoneNumber && formData.phoneNumber.trim().length < 6) {
+      setPhoneNumberError("Please enter a valid phone number");
+      toast.error("Invalid Phone Number", {
+        description: "Please enter a valid phone number",
       });
-      return;
-    }
-
-    // If both area code and phone number are provided together or both empty, that's ok
-    // But if only one is provided, show error
-    if ((formData.areaCode && !formData.phoneNumber) || (!formData.areaCode && formData.phoneNumber)) {
-      if (!formData.phoneNumber) {
-        setPhoneNumberError("Please enter a phone number");
-        toast.error("Incomplete Phone Number", {
-          description: "Please enter both area code and phone number",
-        });
-      }
-      if (!formData.areaCode) {
-        setAreaCodeError("Please enter an area code");
-        toast.error("Incomplete Phone Number", {
-          description: "Please enter both area code and phone number",
-        });
-      }
       return;
     }
 
@@ -286,7 +167,6 @@ const RaffleForm = () => {
         const response = await submitEntry({
           fullName: formData.fullName,
           email: formData.email,
-          areaCode: formData.areaCode,
           phoneNumber: formData.phoneNumber,
           numberOfParticipants: formData.numberOfParticipants,
           joiningLocations: formData.joiningLocations,
@@ -332,7 +212,6 @@ const RaffleForm = () => {
         const response = await submitEntry({
           fullName: formData.fullName,
           email: formData.email,
-          areaCode: formData.areaCode,
           phoneNumber: formData.phoneNumber,
           numberOfParticipants: formData.numberOfParticipants,
           joiningLocations: formData.joiningLocations,
@@ -349,7 +228,6 @@ const RaffleForm = () => {
           setFormData({
             fullName: "",
             email: "",
-            areaCode: "+1",
             phoneNumber: "",
             numberOfParticipants: "",
             joiningLocations: [],
@@ -357,7 +235,6 @@ const RaffleForm = () => {
             otherDonation: "",
           });
           setEmailError("");
-          setAreaCodeError("");
           setPhoneNumberError("");
         } else {
           toast.error("Submission failed", {
@@ -414,62 +291,25 @@ const RaffleForm = () => {
           )}
         </div>
 
-        {/* Phone - Area Code and Number */}
+        {/* Phone Number */}
         <div className="space-y-2">
-          <Label className="text-foreground font-medium text-base">
+          <Label htmlFor="phoneNumber" className="text-foreground font-medium text-base">
             Phone Number <span className="text-gold">*</span>
           </Label>
-          <div className="flex flex-row gap-3">
-            {/* Area Code */}
-            <div className="w-24 flex-shrink-0">
-              <Label htmlFor="areaCode" className="text-xs text-foreground/70 mb-1 block">
-                Country Code
-              </Label>
-              <Input
-                id="areaCode"
-                type="text"
-                placeholder="+1"
-                value={formData.areaCode}
-                onChange={(e) => handleAreaCodeChange(e.target.value)}
-                required
-                maxLength={4}
-                className={`bg-input/80 backdrop-blur-sm border-border/60 text-foreground placeholder:text-foreground/50 focus:border-gold focus:ring-2 focus:ring-gold/40 transition-all duration-300 hover:border-gold/60 hover:shadow-[0_0_15px_rgba(255,215,0,0.2)] ${
-                  areaCodeError ? "border-red-500 focus:border-red-500 focus:ring-red-500/40" : ""
-                }`}
-              />
-              {areaCodeError && (
-                <p className="text-xs text-red-500 mt-1">{areaCodeError}</p>
-              )}
-            </div>
-            {/* Phone Number */}
-            <div className="flex-1">
-              <Label htmlFor="phoneNumber" className="text-xs text-foreground/70 mb-1 block">
-                Number
-              </Label>
-              <Input
-                id="phoneNumber"
-                type="tel"
-                placeholder={currentFormat.placeholder}
-                value={formData.phoneNumber}
-                onChange={(e) => handlePhoneNumberChange(e.target.value)}
-                required
-                inputMode="numeric"
-                className={`bg-input/80 backdrop-blur-sm border-border/60 text-foreground placeholder:text-foreground/50 focus:border-gold focus:ring-2 focus:ring-gold/40 transition-all duration-300 hover:border-gold/60 hover:shadow-[0_0_15px_rgba(255,215,0,0.2)] ${
-                  phoneNumberError ? "border-red-500 focus:border-red-500 focus:ring-red-500/40" : ""
-                }`}
-              />
-              {phoneNumberError && (
-                <p className="text-xs text-red-500 mt-1">{phoneNumberError}</p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Separator */}
-        <div className="flex items-center justify-center py-4">
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-          <div className="mx-4 text-2xl animate-candle-flicker">✨</div>
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+          <Input
+            id="phoneNumber"
+            type="tel"
+            placeholder="Enter your phone number"
+            value={formData.phoneNumber}
+            onChange={(e) => handlePhoneNumberChange(e.target.value)}
+            required
+            className={`bg-input/80 backdrop-blur-sm border-border/60 text-foreground placeholder:text-foreground/50 focus:border-gold focus:ring-2 focus:ring-gold/40 transition-all duration-300 hover:border-gold/60 hover:shadow-[0_0_15px_rgba(255,215,0,0.2)] ${
+              phoneNumberError ? "border-red-500 focus:border-red-500 focus:ring-red-500/40" : ""
+            }`}
+          />
+          {phoneNumberError && (
+            <p className="text-sm text-red-500 mt-1">{phoneNumberError}</p>
+          )}
         </div>
 
         {/* Number of Participants Section */}
@@ -496,13 +336,6 @@ const RaffleForm = () => {
               ))}
             </SelectContent>
           </Select>
-        </div>
-
-        {/* Separator */}
-        <div className="flex items-center justify-center py-4">
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-          <div className="mx-4 text-2xl animate-candle-flicker">✨</div>
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
         </div>
 
         {/* Where Will You Be Joining */}
@@ -570,13 +403,6 @@ const RaffleForm = () => {
           <p className="text-sm text-foreground/60 mt-2">
             Select one or both. Party follows immediately after lighting.
           </p>
-        </div>
-
-        {/* Separator */}
-        <div className="flex items-center justify-center py-4">
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-          <div className="mx-4 text-2xl animate-candle-flicker">✨</div>
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
         </div>
 
         {/* Donate Section */}
@@ -717,6 +543,26 @@ const RaffleForm = () => {
             />
           </div>
 
+        {/* Submit */}
+        <div className="pt-4">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full relative overflow-hidden bg-gradient-to-r from-gold via-amber to-gold text-background font-semibold text-lg py-6 rounded-xl shadow-lg hover:shadow-[0_0_40px_rgba(255,215,0,0.6)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] border border-gold/30 group disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          >
+            <span className="relative z-10">
+              {isSubmitting 
+                ? "Processing..." 
+                : (formData.selectedDonations.length > 0 || otherDonationAmount > 0) 
+                  ? "Pay Now" 
+                  : "Submit Entry"
+              }
+            </span>
+            {/* Ripple effect on hover */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+          </Button>
+        </div>
+
         {/* Chanukah Flyer Image */}
         <div className="pt-6 mt-4 flex justify-center">
           <img
@@ -746,26 +592,6 @@ const RaffleForm = () => {
           alt="Bell St Menorah Schedule"
           className="w-full max-w-3xl mx-auto rounded-3xl shadow-lg my-10"
         />
-      </div>
-
-      {/* Submit */}
-      <div className="pt-4">
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full relative overflow-hidden bg-gradient-to-r from-gold via-amber to-gold text-background font-semibold text-lg py-6 rounded-xl shadow-lg hover:shadow-[0_0_40px_rgba(255,215,0,0.6)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] border border-gold/30 group disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-        >
-          <span className="relative z-10">
-            {isSubmitting 
-              ? "Processing..." 
-              : (formData.selectedDonations.length > 0 || otherDonationAmount > 0) 
-                ? "Pay Now" 
-                : "Submit Entry"
-            }
-          </span>
-          {/* Ripple effect on hover */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-        </Button>
       </div>
     </form>
   );
