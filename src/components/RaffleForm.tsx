@@ -510,11 +510,11 @@ const RaffleForm = () => {
           <Label className="text-foreground font-medium text-base">
             Where will you be joining? <span className="text-gold">*</span>
           </Label>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
             {/* Menorah Lighting Checkbox */}
             <Label 
               htmlFor="location-riverside" 
-              className={`flex items-center gap-3 min-h-[44px] group px-3 py-3 rounded-lg border transition-all duration-200 cursor-pointer ${
+              className={`flex items-center gap-2 md:gap-3 min-h-[40px] md:min-h-[44px] group px-2.5 py-2.5 md:px-3 md:py-3 rounded-lg border transition-all duration-200 cursor-pointer ${
                 formData.joiningLocations.includes('riverside') 
                   ? 'border-gold bg-gold/10' 
                   : 'border-gold/30 hover:border-gold/60 hover:bg-gold/5'
@@ -532,7 +532,7 @@ const RaffleForm = () => {
                 }}
                 className="border-gold/60 data-[state=checked]:bg-gold data-[state=checked]:border-gold ring-offset-background focus-visible:ring-2 focus-visible:ring-gold/40"
               />
-              <span className={`text-base font-normal transition-colors duration-200 leading-relaxed ${
+              <span className={`text-sm md:text-base font-normal transition-colors duration-200 leading-relaxed ${
                 formData.joiningLocations.includes('riverside') ? 'text-gold' : 'text-foreground/90 group-hover:text-gold'
               }`}>
                 Menorah lighting at Riverside Park
@@ -542,7 +542,7 @@ const RaffleForm = () => {
             {/* Chanukah Party Checkbox */}
             <Label 
               htmlFor="location-chabad" 
-              className={`flex items-center gap-3 min-h-[44px] group px-3 py-3 rounded-lg border transition-all duration-200 cursor-pointer ${
+              className={`flex items-center gap-2 md:gap-3 min-h-[40px] md:min-h-[44px] group px-2.5 py-2.5 md:px-3 md:py-3 rounded-lg border transition-all duration-200 cursor-pointer ${
                 formData.joiningLocations.includes('chabad') 
                   ? 'border-gold bg-gold/10' 
                   : 'border-gold/30 hover:border-gold/60 hover:bg-gold/5'
@@ -560,7 +560,7 @@ const RaffleForm = () => {
                 }}
                 className="border-gold/60 data-[state=checked]:bg-gold data-[state=checked]:border-gold ring-offset-background focus-visible:ring-2 focus-visible:ring-gold/40"
               />
-              <span className={`text-base font-normal transition-colors duration-200 leading-relaxed ${
+              <span className={`text-sm md:text-base font-normal transition-colors duration-200 leading-relaxed ${
                 formData.joiningLocations.includes('chabad') ? 'text-gold' : 'text-foreground/90 group-hover:text-gold'
               }`}>
                 Chanukah Party at Chabad at the Falls
@@ -606,7 +606,7 @@ const RaffleForm = () => {
                     <Label
                       key={option.id}
                       htmlFor={`donation-${option.id}`}
-                      className={`flex items-center gap-3 min-h-[48px] px-4 py-3 rounded-lg border cursor-pointer transition-all duration-200 ${
+                      className={`flex items-center gap-2 md:gap-3 min-h-[40px] md:min-h-[48px] px-3 py-2.5 md:px-4 md:py-3 rounded-lg border cursor-pointer transition-all duration-200 ${
                         isChecked
                           ? "border-gold bg-gold/15 shadow-[0_0_15px_rgba(255,215,0,0.15)]"
                           : "border-gold/30 bg-gold/5 hover:border-gold/60 hover:bg-gold/10"
@@ -621,7 +621,7 @@ const RaffleForm = () => {
                         className="border-gold/60 data-[state=checked]:bg-gold data-[state=checked]:border-gold ring-offset-background focus-visible:ring-2 focus-visible:ring-gold/40 shrink-0"
                         aria-label={`${option.label} - $${option.amount}.00`}
                       />
-                      <span className={`flex-1 flex items-center justify-between ${isChecked ? "text-gold font-medium" : "text-foreground/90"}`}>
+                      <span className={`flex-1 flex items-center justify-between text-sm md:text-base ${isChecked ? "text-gold font-medium" : "text-foreground/90"}`}>
                         <span>{option.label}</span>
                         <span className={`font-semibold ${isChecked ? "text-gold" : "text-gold/80"}`}>
                           ${option.amount.toFixed(2)}
@@ -645,7 +645,7 @@ const RaffleForm = () => {
                     <Label
                       key={option.id}
                       htmlFor={`donation-${option.id}`}
-                      className={`flex items-center gap-3 min-h-[48px] px-4 py-3 rounded-lg border cursor-pointer transition-all duration-200 ${
+                      className={`flex items-center gap-2 md:gap-3 min-h-[40px] md:min-h-[48px] px-3 py-2.5 md:px-4 md:py-3 rounded-lg border cursor-pointer transition-all duration-200 ${
                         isChecked
                           ? "border-gold bg-gold/15 shadow-[0_0_15px_rgba(255,215,0,0.15)]"
                           : "border-gold/30 bg-gold/5 hover:border-gold/60 hover:bg-gold/10"
@@ -660,7 +660,7 @@ const RaffleForm = () => {
                         className="border-gold/60 data-[state=checked]:bg-gold data-[state=checked]:border-gold ring-offset-background focus-visible:ring-2 focus-visible:ring-gold/40 shrink-0"
                         aria-label={`${option.label} - $${option.amount}.00`}
                       />
-                      <span className={`flex-1 flex items-center justify-between ${isChecked ? "text-gold font-medium" : "text-foreground/90"}`}>
+                      <span className={`flex-1 flex items-center justify-between text-sm md:text-base ${isChecked ? "text-gold font-medium" : "text-foreground/90"}`}>
                         <span>{option.label}</span>
                         <span className={`font-semibold ${isChecked ? "text-gold" : "text-gold/80"}`}>
                           ${option.amount.toFixed(2)}
