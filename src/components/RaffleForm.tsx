@@ -17,23 +17,33 @@ import { supabase } from "@/integrations/supabase/client";
 
 const FORM_SUBMITTED_KEY = "menorah_form_submitted";
 
+const INITIAL_FORM_STATE = {
+  fullName: "",
+  email: "",
+  phoneNumber: "",
+  numberOfParticipants: "",
+  joiningLocations: ['riverside'] as string[],
+  selectedDonations: [] as string[],
+  otherDonation: "",
+};
+
 const RaffleForm = () => {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phoneNumber: "",
-    numberOfParticipants: "",
-    joiningLocations: ['riverside'] as string[],
-    selectedDonations: [] as string[],
-    otherDonation: "",
-  });
+  const [formData, setFormData] = useState(INITIAL_FORM_STATE);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [emailError, setEmailError] = useState<string>("");
   const [phoneNumberError, setPhoneNumberError] = useState<string>("");
 
+  // Reset form to initial state
+  const resetForm = () => {
+    setFormData(INITIAL_FORM_STATE);
+    setEmailError("");
+    setPhoneNumberError("");
+  };
+
   // Check if form was already submitted and redirect
   useEffect(() => {
     if (localStorage.getItem(FORM_SUBMITTED_KEY)) {
+      resetForm(); // Clear form state before redirect
       window.location.href = "https://jewishchagrinfalls.com/landing";
     }
   }, []);
@@ -214,7 +224,8 @@ const RaffleForm = () => {
           return;
         }
 
-        // Mark form as submitted before redirecting to Stripe
+        // Reset form and mark as submitted before redirecting to Stripe
+        resetForm();
         localStorage.setItem(FORM_SUBMITTED_KEY, "true");
         
         // Redirect to Stripe checkout
@@ -232,7 +243,8 @@ const RaffleForm = () => {
         });
 
         if (response.success) {
-          // Mark form as submitted and redirect to external thank-you page
+          // Reset form, mark as submitted, and redirect to external thank-you page
+          resetForm();
           localStorage.setItem(FORM_SUBMITTED_KEY, "true");
           window.location.href = "https://jewishchagrinfalls.com/landing";
         } else {
