@@ -9,8 +9,8 @@ const FORM_SUBMITTED_KEY = "menorah_form_submitted";
 // Success component that auto-redirects to external thank-you page
 function SuccessRedirect({ paymentData }: { paymentData: any }) {
   useEffect(() => {
-    // Mark form as submitted to prevent back navigation
-    localStorage.setItem(FORM_SUBMITTED_KEY, "true");
+    // Mark form as submitted to prevent back navigation in this session
+    sessionStorage.setItem(FORM_SUBMITTED_KEY, "true");
     
     // Auto-redirect after a brief moment to show success
     const timer = setTimeout(() => {
