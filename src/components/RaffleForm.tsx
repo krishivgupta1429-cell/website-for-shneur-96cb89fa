@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +15,8 @@ import { submitEntry } from "@/lib/submitEntry";
 import { validateEmail } from "@/lib/emailValidation";
 import { supabase } from "@/integrations/supabase/client";
 
+const FORM_SUBMITTED_KEY = "menorah_form_submitted";
+
 const RaffleForm = () => {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -28,6 +30,13 @@ const RaffleForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [emailError, setEmailError] = useState<string>("");
   const [phoneNumberError, setPhoneNumberError] = useState<string>("");
+
+  // Check if form was already submitted and redirect
+  useEffect(() => {
+    if (localStorage.getItem(FORM_SUBMITTED_KEY)) {
+      window.location.href = "https://jewishchagrinfalls.com/landing";
+    }
+  }, []);
 
   // Donation options
   const optionalDonationOptions = [
@@ -205,6 +214,9 @@ const RaffleForm = () => {
           return;
         }
 
+        // Mark form as submitted before redirecting to Stripe
+        localStorage.setItem(FORM_SUBMITTED_KEY, "true");
+        
         // Redirect to Stripe checkout
         window.location.href = checkoutData.url;
       } else {
@@ -220,7 +232,8 @@ const RaffleForm = () => {
         });
 
         if (response.success) {
-          // Redirect to external thank-you page (no toast)
+          // Mark form as submitted and redirect to external thank-you page
+          localStorage.setItem(FORM_SUBMITTED_KEY, "true");
           window.location.href = "https://jewishchagrinfalls.com/landing";
         } else {
           toast.error("Submission failed", {
