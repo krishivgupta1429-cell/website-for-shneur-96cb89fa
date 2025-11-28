@@ -95,6 +95,11 @@ export async function submitEntry(
     const sponsorshipLabels = formData.selectedDonations
       .map(id => donationOptions.find(opt => opt.id === id)?.label)
       .filter(Boolean) as string[];
+    
+    // Add "OTHER DONATION" label when other donation amount is > 0
+    if (otherDonationAmount > 0) {
+      sponsorshipLabels.push('OTHER DONATION');
+    }
 
     // Prepare the database entry
     const entry = {
