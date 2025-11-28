@@ -67,19 +67,6 @@ export async function submitEntry(
       };
     }
 
-    // Donation options (kept for reference/validation if needed)
-    const optionalDonationOptions = [
-      { id: 'dreidel', label: 'DREIDEL', amount: 36 },
-      { id: 'candle', label: 'CANDLE', amount: 54 },
-      { id: 'menorah', label: 'MENORAH', amount: 180 },
-      { id: 'flame', label: 'FLAME', amount: 360 },
-    ];
-
-    const eventSponsorOptions = [
-      { id: 'nightly', label: 'ONE NIGHT OF NIGHTLY LIGHTINGS', amount: 540 },
-      { id: 'coSponsor', label: 'MENORAH AT THE FALLS CO-SPONSOR', amount: 1800 },
-    ];
-
     // Parse other donation amount
     const otherDonationAmount = parseFloat(formData.otherDonation) || 0;
 
@@ -91,16 +78,34 @@ export async function submitEntry(
     // Phone number (store as-is, no formatting required)
     const phoneNumber = formData.phoneNumber ? formData.phoneNumber.trim() : null;
 
+    // Convert joining locations to booleans
+    const joinMenorahLighting = formData.joiningLocations.includes('riverside');
+    const joinChanukahParty = formData.joiningLocations.includes('chabad');
+
+    // Map selected donation IDs to their labels for storage
+    const donationOptions = [
+      { id: 'dreidel', label: 'DREIDEL' },
+      { id: 'candle', label: 'CANDLE' },
+      { id: 'menorah', label: 'MENORAH' },
+      { id: 'flame', label: 'FLAME' },
+      { id: 'nightly', label: 'ONE NIGHT OF NIGHTLY LIGHTINGS' },
+      { id: 'coSponsor', label: 'MENORAH AT THE FALLS CO-SPONSOR' },
+    ];
+    
+    const sponsorshipLabels = formData.selectedDonations
+      .map(id => donationOptions.find(opt => opt.id === id)?.label)
+      .filter(Boolean) as string[];
+
     // Prepare the database entry
     const entry = {
       full_name: formData.fullName.trim(),
       email: formData.email.trim().toLowerCase(),
-      area_code: null,
       phone_number: phoneNumber,
       full_phone: phoneNumber,
-      number_of_participants: parseInt(formData.numberOfParticipants, 10),
-      joining_locations: formData.joiningLocations,
-      selected_donations: formData.selectedDonations,
+      number_of_participants: parseInt(formData.numberOfParticipants, 10) || 1,
+      join_menorah_lighting: joinMenorahLighting,
+      join_chanukah_party: joinChanukahParty,
+      sponsorships: sponsorshipLabels,
       other_donation: otherDonationAmount > 0 ? otherDonationAmount : null,
       wants_to_donate: wantsToDonate,
       verification_token: verificationToken,

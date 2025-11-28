@@ -19,7 +19,6 @@ async function sendDonorConfirmationEmail(
   email: string,
   donationData: {
     amountCents: number;
-    cansQuantity: number;
     sponsorships: string[];
     donationDate: string;
     transactionId: string;
@@ -56,22 +55,16 @@ async function sendDonorConfirmationEmail(
       bullets.push(`• Total Donation amount: ${formattedAmount}`);
     }
     
-    // Cans line (only if cans > 0)
-    if (donationData.cansQuantity > 0) {
-      bullets.push(`• ${donationData.cansQuantity} cans sponsored`);
-    }
-    
     // Date and transaction reference
     bullets.push(`• ${formattedDate}`);
     bullets.push(`• Ref: ${donationData.transactionId}`);
 
     const htmlContent = `Dear ${fullName},<br/><br/>
-      Thank you for signing up for Menorah in the Square. We're delighted that you'll be joining us as our community gathers to celebrate the light and joy of Chanukah together.<br/><br/>
+      Thank you for signing up for Menorah at the Falls. We're delighted that you'll be joining us as our community gathers to celebrate the light and joy of Chanukah together.<br/><br/>
       <strong>Event Information</strong><br/><br/>
-      📍 Rotary Square<br/>
-      203 S Union St, Traverse City, MI 49684<br/><br/>
+      📍 Riverside Park<br/><br/>
       🕔 Event Start: 5:00 PM<br/>
-      📅 Date: December 21st<br/><br/>
+      📅 Date: December 25th<br/><br/>
       This annual celebration has become a cherished moment of unity in our city—filled with warmth, music, doughnuts, and the glow of the menorah. We look forward to sharing this uplifting evening with you.<br/><br/>
       To help spread the light even further, we warmly invite you to share the sign-up link with five friends:<br/>
       👉 <a href="https://menorah.jewishtc.org/">https://menorah.jewishtc.org/</a><br/><br/>
@@ -83,7 +76,7 @@ async function sendDonorConfirmationEmail(
       If you prefer to remain anonymous on the Lamplighter Donor Wall, simply reply to this email and let us know—we're happy to list your gift anonymously.<br/><br/>
       ⸻<br/><br/>
       <strong>Donation Acknowledgment</strong><br/><br/>
-      We are also truly grateful for your generous support of Menorah in the Square. Your contribution helps build our Menorah of Cans and brings light and compassion to those in need throughout Traverse City.<br/><br/>
+      We are also truly grateful for your generous support of Menorah at the Falls. Your contribution helps bring light and compassion to those in need throughout Traverse City.<br/><br/>
       <strong>Donation Details</strong><br/>
       ${bullets.join("<br/>")}<br/><br/>
       Your partnership makes a heartfelt difference. Thank you for helping illuminate our community with kindness.<br/><br/>
@@ -93,7 +86,7 @@ async function sendDonorConfirmationEmail(
       sender: { name: "Rabbi Laibel Shemtov", email: "rabbi@jewishtc.org" },
       to: [{ email, name: fullName }],
       bcc: [{ email: "laibelswb@gmail.com", name: "Rabbi Laibel" }],
-      subject: "Welcome to Menorah in the Square ✨",
+      subject: "Welcome to Menorah at the Falls ✨",
       htmlContent,
     };
 
@@ -166,7 +159,7 @@ serve(async (req) => {
     // Find the form submission by checkout session ID
     const { data: submission, error: findError } = await supabaseAdmin
       .from("form_submissions")
-      .select("id, wants_to_donate, payment_status, full_name, email, cans_quantity, sponsorships, created_at")
+      .select("id, wants_to_donate, payment_status, full_name, email, sponsorships, created_at")
       .eq("stripe_checkout_session_id", session_id)
       .maybeSingle();
 
@@ -275,7 +268,6 @@ serve(async (req) => {
         submission.email,
         {
           amountCents: amountInCents,
-          cansQuantity: submission.cans_quantity || 0,
           sponsorships: submission.sponsorships || [],
           donationDate: submission.created_at,
           transactionId: paymentIntentId || session_id,
