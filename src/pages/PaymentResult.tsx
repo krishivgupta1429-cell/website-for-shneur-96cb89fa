@@ -4,6 +4,46 @@ import { supabase } from "@/integrations/supabase/client";
 import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// Success component that auto-redirects to external thank-you page
+function SuccessRedirect({ paymentData }: { paymentData: any }) {
+  useEffect(() => {
+    // Auto-redirect after a brief moment to show success
+    const timer = setTimeout(() => {
+      window.location.href = "https://jewishchagrinfalls.com/landing";
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div className="text-center">
+      <CheckCircle2 className="w-12 h-12 mx-auto mb-4 text-primary" />
+      <h2 className="text-xl font-semibold text-foreground mb-2">
+        Payment Successful!
+      </h2>
+      <p className="text-muted-foreground mb-4">
+        Thank you for your generous contribution.
+      </p>
+      <div className="bg-muted/30 rounded-md p-4 mb-6 text-sm">
+        <div className="flex justify-between mb-2">
+          <span className="text-muted-foreground">Amount:</span>
+          <span className="font-semibold text-foreground">
+            ${(paymentData.amount_total / 100).toFixed(2)} {paymentData.currency?.toUpperCase()}
+          </span>
+        </div>
+        {paymentData.customer_email && (
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Email:</span>
+            <span className="font-semibold text-foreground">{paymentData.customer_email}</span>
+          </div>
+        )}
+      </div>
+      <p className="text-sm text-muted-foreground">
+        Redirecting you...
+      </p>
+    </div>
+  );
+}
+
 export default function PaymentResult() {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get("session_id");
@@ -107,35 +147,7 @@ export default function PaymentResult() {
             </Link>
           </div>
         ) : (
-          <div className="text-center">
-            <CheckCircle2 className="w-12 h-12 mx-auto mb-4 text-primary" />
-            <h2 className="text-xl font-semibold text-foreground mb-2">
-              Payment Successful!
-            </h2>
-            <p className="text-muted-foreground mb-4">
-              Thank you for your generous contribution.
-            </p>
-            <div className="bg-muted/30 rounded-md p-4 mb-6 text-sm">
-              <div className="flex justify-between mb-2">
-                <span className="text-muted-foreground">Amount:</span>
-                <span className="font-semibold text-foreground">
-                  ${(paymentData.amount_total / 100).toFixed(2)} {paymentData.currency?.toUpperCase()}
-                </span>
-              </div>
-              {paymentData.customer_email && (
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Email:</span>
-                  <span className="font-semibold text-foreground">{paymentData.customer_email}</span>
-                </div>
-              )}
-            </div>
-            <p className="text-sm text-muted-foreground mb-6">
-              A confirmation email will be sent to you shortly.
-            </p>
-            <Link to="/">
-              <Button className="w-full">Return to Home</Button>
-            </Link>
-          </div>
+          <SuccessRedirect paymentData={paymentData} />
         )}
       </div>
     </div>

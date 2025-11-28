@@ -220,22 +220,8 @@ const RaffleForm = () => {
         });
 
         if (response.success) {
-          toast.success("Success! ✨", {
-            description: "Thank you for being part of our community celebration.",
-          });
-
-          // Reset form
-          setFormData({
-            fullName: "",
-            email: "",
-            phoneNumber: "",
-            numberOfParticipants: "",
-            joiningLocations: [],
-            selectedDonations: [],
-            otherDonation: "",
-          });
-          setEmailError("");
-          setPhoneNumberError("");
+          // Redirect to external thank-you page (no toast)
+          window.location.href = "https://jewishchagrinfalls.com/landing";
         } else {
           toast.error("Submission failed", {
             description: response.error || "Please try again.",
