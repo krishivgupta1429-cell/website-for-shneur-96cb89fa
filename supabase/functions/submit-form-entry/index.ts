@@ -9,17 +9,13 @@ const corsHeaders = {
 interface SubmitEntryBody {
   full_name: string;
   email: string;
-  area_code?: string | null;
   phone_number?: string | null;
   full_phone?: string | null;
-  number_of_adults: number;
-  number_of_children?: number;
-  reason: string;
-  reason_other?: string | null;
+  number_of_participants: number;
+  join_menorah_lighting: boolean;
+  join_chanukah_party: boolean;
   sponsorships: string[];
-  cans_quantity: number;
-  comments?: string | null;
-  email_updates_opt_in?: boolean;
+  other_donation?: number | null;
   wants_to_donate?: boolean;
   verification_token: string;
   verification_sent_at: string;
@@ -33,11 +29,10 @@ async function sendRegistrationEmail(fullName: string, email: string): Promise<v
     }
 
     const htmlContent = `Hi ${fullName},<br/><br/>
-      Thank you so much for signing up for Menorah in the Square—we can't wait to celebrate with you!<br/><br/>
-      📍 <strong>Location:</strong> Rotary Square<br/>
-      203 S Union St, Traverse City, MI 49684<br/>
+      Thank you so much for signing up for Menorah at the Falls—we can't wait to celebrate with you!<br/><br/>
+      📍 <strong>Location:</strong> Riverside Park<br/>
       🕔 <strong>Event Start Time:</strong> 5:00 PM<br/>
-      📅 <strong>Date:</strong> December 21st<br/><br/>
+      📅 <strong>Date:</strong> December 25th<br/><br/>
       Your participation helps bring warmth and light to our whole community.<br/><br/>
       To help spread the light even further, would you consider forwarding the event sign-up to five friends?<br/><br/>
       Here's the link: <a href="https://menorah.jewishtc.org/">https://menorah.jewishtc.org/</a><br/><br/>
@@ -58,7 +53,7 @@ async function sendRegistrationEmail(fullName: string, email: string): Promise<v
       sender: { name: "Rabbi Laibel Shemtov", email: "rabbi@jewishtc.org" },
       to: [{ email, name: fullName }],
       bcc: [{ email: "laibelswb@gmail.com", name: "Rabbi Laibel" }],
-      subject: "You're Registered for Menorah in the Square!",
+      subject: "You're Registered for Menorah at the Falls!",
       htmlContent,
     };
 
@@ -101,34 +96,23 @@ serve(async (req) => {
     const body = (await req.json()) as Partial<SubmitEntryBody>;
 
     // Minimal validation of required fields
-    if (!body.full_name || !body.email || !body.reason || !body.verification_token || !body.verification_sent_at || body.number_of_adults === undefined) {
+    if (!body.full_name || !body.email || !body.verification_token || !body.verification_sent_at || body.number_of_participants === undefined) {
       return new Response(
         JSON.stringify({ error: "Missing required fields" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
       );
     }
 
-    // Compute full_phone if not provided but parts are
-    let full_phone = body.full_phone ?? null;
-    if (!full_phone && body.area_code && body.phone_number) {
-      full_phone = `${body.area_code}${body.phone_number}`;
-    }
-
-    // Prepare insert payload
+    // Prepare insert payload with new schema
     const insertPayload = {
       full_name: body.full_name.trim(),
       email: body.email.trim().toLowerCase(),
-      area_code: body.area_code?.trim() ?? null,
       phone_number: body.phone_number?.trim() ?? null,
-      full_phone,
-      number_of_adults: body.number_of_adults,
-      number_of_children: body.number_of_children ?? 0,
-      reason: body.reason,
-      reason_other: body.reason_other?.trim() ?? null,
+      full_phone: body.full_phone?.trim() ?? null,
+      number_of_participants: body.number_of_participants,
+      join_menorah_lighting: body.join_menorah_lighting ?? false,
+      join_chanukah_party: body.join_chanukah_party ?? false,
       sponsorships: body.sponsorships ?? [],
-      cans_quantity: body.cans_quantity ?? 0,
-      comments: body.comments?.trim() ?? null,
-      email_updates_opt_in: body.email_updates_opt_in ?? false,
       wants_to_donate: body.wants_to_donate ?? false,
       verification_token: body.verification_token,
       verification_sent_at: body.verification_sent_at,

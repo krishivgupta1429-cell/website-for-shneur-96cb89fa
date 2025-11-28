@@ -63,23 +63,18 @@ export type Database = {
       }
       form_submissions: {
         Row: {
-          area_code: string | null
-          cans_quantity: number | null
-          comments: string | null
           created_at: string
           email: string
-          email_updates_opt_in: boolean | null
           full_name: string
           full_phone: string | null
           id: string
           is_donor: boolean | null
-          number_of_adults: number | null
-          number_of_children: number | null
+          join_chanukah_party: boolean
+          join_menorah_lighting: boolean
+          number_of_participants: number
           payment_amount_cents: number | null
           payment_status: string | null
           phone_number: string | null
-          reason: string | null
-          reason_other: string | null
           sponsorships: string[] | null
           stripe_checkout_session_id: string | null
           stripe_customer_id: string | null
@@ -89,23 +84,18 @@ export type Database = {
           wants_to_donate: boolean | null
         }
         Insert: {
-          area_code?: string | null
-          cans_quantity?: number | null
-          comments?: string | null
           created_at?: string
           email: string
-          email_updates_opt_in?: boolean | null
           full_name: string
           full_phone?: string | null
           id?: string
           is_donor?: boolean | null
-          number_of_adults?: number | null
-          number_of_children?: number | null
+          join_chanukah_party?: boolean
+          join_menorah_lighting?: boolean
+          number_of_participants?: number
           payment_amount_cents?: number | null
           payment_status?: string | null
           phone_number?: string | null
-          reason?: string | null
-          reason_other?: string | null
           sponsorships?: string[] | null
           stripe_checkout_session_id?: string | null
           stripe_customer_id?: string | null
@@ -115,23 +105,18 @@ export type Database = {
           wants_to_donate?: boolean | null
         }
         Update: {
-          area_code?: string | null
-          cans_quantity?: number | null
-          comments?: string | null
           created_at?: string
           email?: string
-          email_updates_opt_in?: boolean | null
           full_name?: string
           full_phone?: string | null
           id?: string
           is_donor?: boolean | null
-          number_of_adults?: number | null
-          number_of_children?: number | null
+          join_chanukah_party?: boolean
+          join_menorah_lighting?: boolean
+          number_of_participants?: number
           payment_amount_cents?: number | null
           payment_status?: string | null
           phone_number?: string | null
-          reason?: string | null
-          reason_other?: string | null
           sponsorships?: string[] | null
           stripe_checkout_session_id?: string | null
           stripe_customer_id?: string | null
