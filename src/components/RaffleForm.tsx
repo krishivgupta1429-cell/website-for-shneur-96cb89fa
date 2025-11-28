@@ -40,9 +40,9 @@ const RaffleForm = () => {
     setPhoneNumberError("");
   };
 
-  // Check if form was already submitted and redirect
+  // Check if form was already submitted in this session and redirect
   useEffect(() => {
-    if (localStorage.getItem(FORM_SUBMITTED_KEY)) {
+    if (sessionStorage.getItem(FORM_SUBMITTED_KEY)) {
       resetForm(); // Clear form state before redirect
       window.location.href = "https://jewishchagrinfalls.com/landing";
     }
@@ -226,7 +226,7 @@ const RaffleForm = () => {
 
         // Reset form and mark as submitted before redirecting to Stripe
         resetForm();
-        localStorage.setItem(FORM_SUBMITTED_KEY, "true");
+        sessionStorage.setItem(FORM_SUBMITTED_KEY, "true");
         
         // Redirect to Stripe checkout
         window.location.href = checkoutData.url;
@@ -245,7 +245,7 @@ const RaffleForm = () => {
         if (response.success) {
           // Reset form, mark as submitted, and redirect to external thank-you page
           resetForm();
-          localStorage.setItem(FORM_SUBMITTED_KEY, "true");
+          sessionStorage.setItem(FORM_SUBMITTED_KEY, "true");
           window.location.href = "https://jewishchagrinfalls.com/landing";
         } else {
           toast.error("Submission failed", {
