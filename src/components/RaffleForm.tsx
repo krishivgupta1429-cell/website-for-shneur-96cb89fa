@@ -443,26 +443,28 @@ const RaffleForm = () => {
                     <Label
                       key={option.id}
                       htmlFor={`donation-${option.id}`}
-                      className={`flex items-center gap-3 md:gap-3 min-h-[56px] md:min-h-[56px] px-3 py-3 md:px-4 md:py-3 rounded-2xl md:rounded-lg border cursor-pointer transition-all duration-200 ${
+                      className={`flex items-center justify-between gap-3 min-h-[48px] md:min-h-[56px] px-4 py-2.5 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl border cursor-pointer transition-all duration-200 ${
                         isChecked
                           ? "border-gold bg-gold/15 shadow-[0_0_15px_rgba(255,215,0,0.15)]"
                           : "border-gold/30 bg-gold/5 hover:border-gold/60 hover:bg-gold/10"
                       }`}
                     >
-                      <Checkbox
-                        id={`donation-${option.id}`}
-                        checked={isChecked}
-                        onCheckedChange={(checked) => {
-                          handleDonationChange(option.id, checked as boolean);
-                        }}
-                        className="border-gold/60 data-[state=checked]:bg-gold data-[state=checked]:border-gold ring-offset-background focus-visible:ring-2 focus-visible:ring-gold/40 shrink-0"
-                        aria-label={`${option.label} - $${option.amount}.00`}
-                      />
-                      <span className={`flex-1 flex items-center justify-between text-sm md:text-base ${isChecked ? "text-gold font-medium" : "text-foreground/90"}`}>
-                        <span className="font-medium">{option.label}</span>
-                        <span className={`font-semibold whitespace-nowrap ${isChecked ? "text-gold" : "text-gold/80"}`}>
-                          ${option.amount.toFixed(2)}
+                      <div className="flex items-center gap-3">
+                        <Checkbox
+                          id={`donation-${option.id}`}
+                          checked={isChecked}
+                          onCheckedChange={(checked) => {
+                            handleDonationChange(option.id, checked as boolean);
+                          }}
+                          className="border-gold/60 data-[state=checked]:bg-gold data-[state=checked]:border-gold ring-offset-background focus-visible:ring-2 focus-visible:ring-gold/40 shrink-0"
+                          aria-label={`${option.label} - $${option.amount}.00`}
+                        />
+                        <span className={`text-sm md:text-base font-medium ${isChecked ? "text-gold" : "text-foreground/90"}`}>
+                          {option.label}
                         </span>
+                      </div>
+                      <span className={`text-sm md:text-base font-semibold whitespace-nowrap ${isChecked ? "text-gold" : "text-gold/80"}`}>
+                        ${option.amount.toFixed(2)}
                       </span>
                     </Label>
                   );
@@ -482,26 +484,28 @@ const RaffleForm = () => {
                     <Label
                       key={option.id}
                       htmlFor={`donation-${option.id}`}
-                      className={`flex items-center gap-3 md:gap-3 min-h-[56px] md:min-h-[56px] px-3 py-3 md:px-4 md:py-3 rounded-2xl md:rounded-lg border cursor-pointer transition-all duration-200 ${
+                      className={`flex items-center justify-between gap-3 min-h-[48px] md:min-h-[56px] px-4 py-2.5 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl border cursor-pointer transition-all duration-200 ${
                         isChecked
                           ? "border-gold bg-gold/15 shadow-[0_0_15px_rgba(255,215,0,0.15)]"
                           : "border-gold/30 bg-gold/5 hover:border-gold/60 hover:bg-gold/10"
                       }`}
                     >
-                      <Checkbox
-                        id={`donation-${option.id}`}
-                        checked={isChecked}
-                        onCheckedChange={(checked) => {
-                          handleDonationChange(option.id, checked as boolean);
-                        }}
-                        className="border-gold/60 data-[state=checked]:bg-gold data-[state=checked]:border-gold ring-offset-background focus-visible:ring-2 focus-visible:ring-gold/40 shrink-0"
-                        aria-label={`${option.label} - $${option.amount}.00`}
-                      />
-                      <span className={`flex-1 flex items-center justify-between text-sm md:text-base ${isChecked ? "text-gold font-medium" : "text-foreground/90"}`}>
-                        <span className="font-medium">{option.label}</span>
-                        <span className={`font-semibold whitespace-nowrap ${isChecked ? "text-gold" : "text-gold/80"}`}>
-                          ${option.amount.toFixed(2)}
+                      <div className="flex items-center gap-3">
+                        <Checkbox
+                          id={`donation-${option.id}`}
+                          checked={isChecked}
+                          onCheckedChange={(checked) => {
+                            handleDonationChange(option.id, checked as boolean);
+                          }}
+                          className="border-gold/60 data-[state=checked]:bg-gold data-[state=checked]:border-gold ring-offset-background focus-visible:ring-2 focus-visible:ring-gold/40 shrink-0"
+                          aria-label={`${option.label} - $${option.amount}.00`}
+                        />
+                        <span className={`text-sm md:text-base font-medium ${isChecked ? "text-gold" : "text-foreground/90"}`}>
+                          {option.label}
                         </span>
+                      </div>
+                      <span className={`text-sm md:text-base font-semibold whitespace-nowrap ${isChecked ? "text-gold" : "text-gold/80"}`}>
+                        ${option.amount.toFixed(2)}
                       </span>
                     </Label>
                   );
