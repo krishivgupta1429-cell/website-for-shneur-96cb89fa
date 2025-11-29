@@ -28,32 +28,26 @@ async function sendRegistrationEmail(fullName: string, email: string): Promise<v
       throw new Error("Missing BREVO_API_KEY");
     }
 
-    const htmlContent = `Hi ${fullName},<br/><br/>
-      Thank you so much for signing up for Menorah at the Falls—we can't wait to celebrate with you!<br/><br/>
-      📍 <strong>Location:</strong> Riverside Park<br/>
-      🕔 <strong>Event Start Time:</strong> 5:00 PM<br/>
-      📅 <strong>Date:</strong> December 25th<br/><br/>
-      Your participation helps bring warmth and light to our whole community.<br/><br/>
-      To help spread the light even further, would you consider forwarding the event sign-up to five friends?<br/><br/>
-      Here's the link: <a href="https://menorah.jewishtc.org/">https://menorah.jewishtc.org/</a><br/><br/>
-      If you have any questions at all, feel free to reach out anytime.<br/>
-      Looking forward to celebrating together!<br/><br/>
-      Warmly,<br/>
-      Rabbi Laibel & Chaya Shemtov<br/>
-      Chabad Jewish Center of Traverse City<br/>
-      <a href="https://JewishTC.org">JewishTC.org</a><br/><br/>
-      <strong>P.S.</strong> Congratulations on being among the first 100 sign-ups!<br/>
-      Please show this email when you arrive to receive your free beanie.<br/>
-      Be sure to show it before 5:05 PM—after that time, we'll begin giving them out to everyone.<br/><br/>
-      <strong>P.S.s</strong><br/>
-      View the lamplighter wall:<br/>
-      <a href="https://www.jewishtc.org/templates/articlecco_cdo/aid/7109138/jewish/Untitled.htm">https://www.jewishtc.org/templates/articlecco_cdo/aid/7109138/jewish/Untitled.htm</a>`;
+    const htmlContent = `
+<p>Dear ${fullName},</p>
+
+<p>Thank you for registering for Menorah at the Falls. See you on the first night of Chanukah, Sunday, December 14 at 5pm!</p>
+
+<p>The event begins at Riverside Park. Enjoy a fire show and hot drinks at 5pm, followed by the Menorah lighting and a Gelt Drop from a fire truck at 5:30pm.</p>
+
+<p>After the lighting, the celebration continues up the street at Chabad at the Falls, 100 N Main Street, Suite 100. Join a Chanukah party with latkes, donuts, children's activities, and fun for the whole family.</p>
+
+<p>--</p>
+
+<p>You can also join us at the Triangle bandstand each night of Chanukah for a Menorah lighting ceremony, December 15 through December 21 at 7pm. Full schedule at <a href="https://jewishchagrinfalls.com/chanukah">jewishchagrinfalls.com/chanukah</a>.</p>
+`;
 
     const payload = {
-      sender: { name: "Rabbi Laibel Shemtov", email: "rabbi@jewishtc.org" },
+      sender: { name: "Menorah at the Falls", email: "Rabbi@jewishchagrinfalls.com" },
       to: [{ email, name: fullName }],
-      bcc: [{ email: "laibelswb@gmail.com", name: "Rabbi Laibel" }],
-      subject: "You're Registered for Menorah at the Falls!",
+      cc: [{ email: "Rabbi@jewishchagrinfalls.com", name: "Rabbi" }],
+      bcc: [{ email: "laibelswb@gmail.com", name: "Internal" }],
+      subject: "You're registered for Menorah at the Falls!",
       htmlContent,
     };
 

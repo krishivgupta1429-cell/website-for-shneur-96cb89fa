@@ -13,6 +13,17 @@ const logStep = (step: string, details?: any) => {
   console.log(`[VERIFY-PAYMENT-LIVE] ${step}${detailsStr}`);
 };
 
+// Format date in America/New_York timezone
+function formatDateET(dateString: string): string {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    timeZone: "America/New_York",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 // Send combined confirmation + donation receipt email via Brevo API
 async function sendDonorConfirmationEmail(
   fullName: string,
@@ -32,61 +43,47 @@ async function sendDonorConfirmationEmail(
 
     // Format amount from cents to dollars
     const amountDollars = donationData.amountCents / 100;
-    const formattedAmount = Number.isInteger(amountDollars)
-      ? `$${amountDollars}`
-      : `$${amountDollars.toFixed(2)}`;
+    const formattedAmount = `$${amountDollars.toFixed(2)}`;
 
-    // Format donation date
-    const date = new Date(donationData.donationDate);
-    const formattedDate = date.toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
+    // Format donation date in ET
+    const formattedDate = formatDateET(donationData.donationDate);
 
-    // Build conditional donation details bullets
-    const bullets: string[] = [];
-    
-    // Total donation amount with optional sponsorships
-    if (donationData.sponsorships && donationData.sponsorships.length > 0) {
-      const sponsorshipText = donationData.sponsorships.join(", ");
-      bullets.push(`• Total Donation amount: ${formattedAmount} — ${sponsorshipText}`);
-    } else {
-      bullets.push(`• Total Donation amount: ${formattedAmount}`);
-    }
-    
-    // Date and transaction reference
-    bullets.push(`• ${formattedDate}`);
-    bullets.push(`• Ref: ${donationData.transactionId}`);
+    // Format sponsorships as comma-separated string
+    const sponsorshipsText = donationData.sponsorships && donationData.sponsorships.length > 0
+      ? donationData.sponsorships.join(", ")
+      : "General Donation";
 
-    const htmlContent = `Dear ${fullName},<br/><br/>
-      Thank you for signing up for Menorah at the Falls. We're delighted that you'll be joining us as our community gathers to celebrate the light and joy of Chanukah together.<br/><br/>
-      <strong>Event Information</strong><br/><br/>
-      📍 Riverside Park<br/><br/>
-      🕔 Event Start: 5:00 PM<br/>
-      📅 Date: December 25th<br/><br/>
-      This annual celebration has become a cherished moment of unity in our city—filled with warmth, music, doughnuts, and the glow of the menorah. We look forward to sharing this uplifting evening with you.<br/><br/>
-      To help spread the light even further, we warmly invite you to share the sign-up link with five friends:<br/>
-      👉 <a href="https://menorah.jewishtc.org/">https://menorah.jewishtc.org/</a><br/><br/>
-      <strong>Congratulations!!</strong><br/>
-      You are among the first 100 sign-ups.<br/>
-      Please present this email upon arrival to receive your complimentary beanie before 5:05 PM.<br/><br/>
-      To see the Lamplighter Wall, visit:<br/>
-      <a href="https://www.jewishtc.org/templates/articlecco_cdo/aid/7109138/jewish/Untitled.htm">https://www.jewishtc.org/templates/articlecco_cdo/aid/7109138/jewish/Untitled.htm</a><br/>
-      If you prefer to remain anonymous on the Lamplighter Donor Wall, simply reply to this email and let us know—we're happy to list your gift anonymously.<br/><br/>
-      ⸻<br/><br/>
-      <strong>Donation Acknowledgment</strong><br/><br/>
-      We are also truly grateful for your generous support of Menorah at the Falls. Your contribution helps bring light and compassion to those in need throughout Traverse City.<br/><br/>
-      <strong>Donation Details</strong><br/>
-      ${bullets.join("<br/>")}<br/><br/>
-      Your partnership makes a heartfelt difference. Thank you for helping illuminate our community with kindness.<br/><br/>
-      ⸻`;
+    const htmlContent = `
+<p>Dear ${fullName},</p>
+
+<p>Thank you for registering for Menorah at the Falls. See you on the first night of Chanukah, Sunday, December 14 at 5pm!</p>
+
+<p>The event begins at Riverside Park. Enjoy a fire show and hot drinks at 5pm, followed by the Menorah lighting and a Gelt Drop from a fire truck at 5:30pm.</p>
+
+<p>After the lighting, the celebration continues up the street at Chabad at the Falls, 100 N Main Street, Suite 100. Join a Chanukah party with latkes, donuts, children's activities, and fun for the whole family.</p>
+
+<p>--</p>
+
+<p>You can also join us at the Triangle bandstand each night of Chanukah for a Menorah lighting ceremony, December 15 through December 21 at 7pm. Full schedule at <a href="https://jewishchagrinfalls.com/chanukah">jewishchagrinfalls.com/chanukah</a>.</p>
+
+<p><strong>Donation Acknowledgment</strong></p>
+
+<p>We are also truly grateful for your generous support for Menorah at the Falls. Your generosity helps bring more light, joy, and support to families throughout Chagrin Falls.</p>
+
+<p><strong>Donation Details</strong><br/>
+• ${formattedAmount} — ${sponsorshipsText}<br/>
+• Date: ${formattedDate}<br/>
+• Reference: ${donationData.transactionId}</p>
+
+<p>Your partnership makes a heartfelt difference. Thank you for helping illuminate our community with kindness.</p>
+`;
 
     const payload = {
-      sender: { name: "Rabbi Laibel Shemtov", email: "rabbi@jewishtc.org" },
+      sender: { name: "Menorah at the Falls", email: "Rabbi@jewishchagrinfalls.com" },
       to: [{ email, name: fullName }],
-      bcc: [{ email: "laibelswb@gmail.com", name: "Rabbi Laibel" }],
-      subject: "Welcome to Menorah at the Falls ✨",
+      cc: [{ email: "Rabbi@jewishchagrinfalls.com", name: "Rabbi" }],
+      bcc: [{ email: "laibelswb@gmail.com", name: "Internal" }],
+      subject: "You're registered for Menorah at the Falls – thank you for your donation!",
       htmlContent,
     };
 
