@@ -524,6 +524,31 @@ All colors MUST be HSL.
       gap: 10px !important;
     }
     
+    /* Donation cards - mobile optimizations */
+    .donation-card {
+      padding: 10px 14px !important;
+      min-height: 48px !important;
+      border-radius: 10px !important;
+      gap: 8px !important;
+    }
+    
+    .donation-card .donation-checkbox {
+      width: 20px !important;
+      height: 20px !important;
+      min-width: 20px !important;
+      min-height: 20px !important;
+      border-width: 1.5px !important;
+    }
+    
+    .donation-label {
+      font-size: 14px !important;
+      line-height: 1.3 !important;
+    }
+    
+    .donation-amount {
+      font-size: 14px !important;
+    }
+    
     /* Reduce shadows and blurs on mobile */
     .sponsorship-card {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
