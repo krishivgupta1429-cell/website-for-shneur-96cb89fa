@@ -51,7 +51,6 @@ async function sendRegistrationEmail(fullName: string, email: string): Promise<v
         { email: "Rabbi@jewishchagrinfalls.com", name: "Rabbi" },
         { email: "simi@jewishchagrinfalls.com", name: "Simi" }
       ],
-      bcc: [{ email: "laibelswb@gmail.com", name: "Internal" }],
       subject: "You're Registered for Menorah at the Falls!",
       htmlContent,
     };

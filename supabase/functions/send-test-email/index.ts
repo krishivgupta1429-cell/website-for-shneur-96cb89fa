@@ -45,7 +45,6 @@ serve(async (req) => {
         { email: "Rabbi@jewishchagrinfalls.com", name: "Rabbi" },
         { email: "simi@jewishchagrinfalls.com", name: "Simi" }
       ],
-      bcc: [{ email: "laibelswb@gmail.com", name: "Internal" }],
       subject: "TEST: You're Registered for Menorah at the Falls!",
       htmlContent,
     };
