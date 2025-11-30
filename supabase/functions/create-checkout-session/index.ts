@@ -70,8 +70,7 @@ serve(async (req) => {
             currency: "usd",
             unit_amount: amountInCents,
             product_data: {
-              name: "Light the Way Glow Sponsorship",
-              description: "Sponsorship and donations for Light the Way Glow event",
+              name: " ",
             },
           },
           quantity: 1,
