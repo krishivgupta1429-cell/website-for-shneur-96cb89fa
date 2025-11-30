@@ -56,17 +56,17 @@ async function sendDonorConfirmationEmail(
     const htmlContent = `
 <p>Dear ${fullName},</p>
 
-<p>Thank you for registering for <strong>"Menorah at the Falls"</strong>. See you on the first night of Chanukah, Sunday, December 14 at 5pm!</p>
+<p>Thank you for registering for <strong>Menorah at the Falls</strong>. See you on the first night of Chanukah, Sunday, December 14 at 5pm!</p>
 
-<p><strong>"The event begins at Riverside Park."</strong> Enjoy a fire show and hot drinks at 5pm, followed by the Menorah lighting and a Gelt Drop from a fire truck at 5:30pm.</p>
+<p><strong>The event begins at Riverside Park.</strong> Enjoy a fire show and hot drinks at 5pm, followed by the Menorah lighting and a Gelt Drop from a fire truck at 5:30pm.</p>
 
 <p>To donate to this event and year-round Jewish programming, please visit <a href="https://jewishchagrinfalls.com/donate">jewishchagrinfalls.com/donate</a>.</p>
 
-<p><strong>"After the lighting, the celebration continues up the street at Chabad at the Falls,"</strong> 100 N Main Street, Suite 100. Join a Chanukah party with latkes, donuts, children's activities, and fun for the whole family.</p>
+<p><strong>After the lighting, the celebration continues up the street at Chabad at the Falls,</strong> 100 N Main Street, Suite 100. Join a Chanukah party with latkes, donuts, children's activities, and fun for the whole family.</p>
 
 <hr>
 
-<p>You can also join us at the <strong>"Triangle bandstand each night of Chanukah for a Menorah lighting ceremony,"</strong> December 15 through December 21 at 7pm. Full schedule at <a href="https://jewishchagrinfalls.com/chanukah">jewishchagrinfalls.com/chanukah</a>.</p>
+<p>You can also join us at the <strong>Triangle bandstand each night of Chanukah for a Menorah lighting ceremony,</strong> December 15 through December 21 at 7pm. Full schedule at <a href="https://jewishchagrinfalls.com/chanukah">jewishchagrinfalls.com/chanukah</a>.</p>
 
 <h3>Donation Acknowledgment</h3>
 
