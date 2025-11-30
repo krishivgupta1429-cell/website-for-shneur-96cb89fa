@@ -11,7 +11,7 @@ interface SubmitEntryBody {
   email: string;
   phone_number?: string | null;
   full_phone?: string | null;
-  number_of_participants: number;
+  number_of_participants?: number | null;
   join_menorah_lighting: boolean;
   join_chanukah_party: boolean;
   sponsorships: string[];
@@ -95,7 +95,7 @@ serve(async (req) => {
     const body = (await req.json()) as Partial<SubmitEntryBody>;
 
     // Minimal validation of required fields
-    if (!body.full_name || !body.email || !body.verification_token || !body.verification_sent_at || body.number_of_participants === undefined) {
+    if (!body.full_name || !body.email || !body.verification_token || !body.verification_sent_at) {
       return new Response(
         JSON.stringify({ error: "Missing required fields" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
@@ -108,7 +108,7 @@ serve(async (req) => {
       email: body.email.trim().toLowerCase(),
       phone_number: body.phone_number?.trim() ?? null,
       full_phone: body.full_phone?.trim() ?? null,
-      number_of_participants: body.number_of_participants,
+      number_of_participants: body.number_of_participants ?? 1,
       join_menorah_lighting: body.join_menorah_lighting ?? false,
       join_chanukah_party: body.join_chanukah_party ?? false,
       sponsorships: body.sponsorships ?? [],
