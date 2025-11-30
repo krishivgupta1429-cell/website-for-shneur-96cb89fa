@@ -161,12 +161,6 @@ const RaffleForm = () => {
       return;
     }
 
-    // Validate number of participants
-    if (!formData.numberOfParticipants) {
-      toast.error("Please select number of participants");
-      return;
-    }
-
     // Validate joining locations
     if (formData.joiningLocations.length === 0) {
       toast.error("Please select at least one location you'll be joining");
@@ -326,12 +320,11 @@ const RaffleForm = () => {
         {/* Number of Participants Section */}
         <div className="space-y-2">
           <Label htmlFor="numberOfParticipants" className="text-foreground font-medium text-base">
-            Number of Participants <span className="text-gold">*</span>
+            Number of Participants
           </Label>
           <Select
             value={formData.numberOfParticipants}
             onValueChange={(value) => setFormData({ ...formData, numberOfParticipants: value })}
-            required
           >
             <SelectTrigger
               id="numberOfParticipants"
