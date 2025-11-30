@@ -70,7 +70,7 @@ serve(async (req) => {
             currency: "usd",
             unit_amount: amountInCents,
             product_data: {
-              name: " ",
+              name: "Donation",
             },
           },
           quantity: 1,
