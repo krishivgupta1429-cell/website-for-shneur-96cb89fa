@@ -87,7 +87,6 @@ async function sendDonorConfirmationEmail(
         { email: "Rabbi@jewishchagrinfalls.com", name: "Rabbi" },
         { email: "simi@jewishchagrinfalls.com", name: "Simi" }
       ],
-      bcc: [{ email: "laibelswb@gmail.com", name: "Internal" }],
       subject: "You're Registered for Menorah at the Falls – Thank You for Your Donation!",
       htmlContent,
     };
