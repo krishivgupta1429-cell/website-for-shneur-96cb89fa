@@ -75,13 +75,15 @@ async function sendDonorConfirmationEmail(
 
 <p><strong>The event begins at Riverside Park.</strong> Enjoy a fire show and hot drinks at 5pm, followed by the Menorah lighting and a Gelt Drop from a fire truck at 5:30pm.</p>
 
+<p>To donate to this event and year-round Jewish programming, please visit <a href="https://jewishchagrinfalls.com/donate">jewishchagrinfalls.com/donate</a>.</p>
+
 <p><strong>After the lighting, the celebration continues up the street at Chabad at the Falls,</strong> 100 N Main Street, Suite 100. Join a Chanukah party with latkes, donuts, children's activities, and fun for the whole family.</p>
 
 <p>--</p>
 
 <p>You can also join us at the <strong>Triangle bandstand each night of Chanukah for a Menorah lighting ceremony,</strong> December 15 through December 21 at 7pm. Full schedule at <a href="https://jewishchagrinfalls.com/chanukah">jewishchagrinfalls.com/chanukah</a>.</p>
 
-<h3>Donation Acknowledgment</h3>
+<p><strong>Donation Acknowledgment</strong></p>
 
 <p>We are also truly grateful for your generous support for Menorah at the Falls. Your generosity helps bring more light, joy, and support to families throughout Chagrin Falls.</p>
 
@@ -94,7 +96,7 @@ async function sendDonorConfirmationEmail(
 
 <p><strong>Attending:</strong><br>
 ${attendingHtml}
-<br>
+<br><br>
 <strong>Number of participants:</strong> ${donationData.numberOfParticipants || 1}
 </p>
 `;
@@ -103,7 +105,8 @@ ${attendingHtml}
       sender: { name: "Menorah at the Falls", email: "Rabbi@jewishchagrinfalls.com" },
       to: [{ email, name: fullName }],
       cc: [
-        { email: "Rabbi@jewishchagrinfalls.com", name: "Rabbi" }
+        { email: "Rabbi@jewishchagrinfalls.com", name: "Rabbi" },
+        { email: "simi@jewishchagrinfalls.com", name: "Simi" }
       ],
       subject: "You're Registered for Menorah at the Falls – Thank You for Your Donation!",
       htmlContent,
