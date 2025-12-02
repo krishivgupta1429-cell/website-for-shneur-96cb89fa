@@ -42,8 +42,7 @@ serve(async (req) => {
       sender: { name: "Menorah at the Falls", email: "Rabbi@jewishchagrinfalls.com" },
       to: [{ email: testEmail, name: fullName }],
       cc: [
-        { email: "Rabbi@jewishchagrinfalls.com", name: "Rabbi" },
-        { email: "simi@jewishchagrinfalls.com", name: "Simi" }
+        { email: "Rabbi@jewishchagrinfalls.com", name: "Rabbi" }
       ],
       subject: "TEST: You're Registered for Menorah at the Falls!",
       htmlContent,
