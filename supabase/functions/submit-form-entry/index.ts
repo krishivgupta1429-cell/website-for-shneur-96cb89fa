@@ -53,6 +53,8 @@ async function sendRegistrationEmail(
 
 <p><strong>The event begins at Riverside Park.</strong> Enjoy a fire show and hot drinks at 5pm, followed by the Menorah lighting and a Gelt Drop from a fire truck at 5:30pm.</p>
 
+<p>To donate to this event and year-round Jewish programming, please visit <a href="https://jewishchagrinfalls.com/donate">jewishchagrinfalls.com/donate</a>.</p>
+
 <p><strong>After the lighting, the celebration continues up the street at Chabad at the Falls,</strong> 100 N Main Street, Suite 100. Join a Chanukah party with latkes, donuts, children's activities, and fun for the whole family.</p>
 
 <p>--</p>
@@ -61,7 +63,7 @@ async function sendRegistrationEmail(
 
 <p><strong>Attending:</strong><br>
 ${attendingHtml}
-<br>
+<br><br>
 <strong>Number of participants:</strong> ${numberOfParticipants || 1}
 </p>
 `;
@@ -70,7 +72,8 @@ ${attendingHtml}
       sender: { name: "Menorah at the Falls", email: "Rabbi@jewishchagrinfalls.com" },
       to: [{ email, name: fullName }],
       cc: [
-        { email: "Rabbi@jewishchagrinfalls.com", name: "Rabbi" }
+        { email: "Rabbi@jewishchagrinfalls.com", name: "Rabbi" },
+        { email: "simi@jewishchagrinfalls.com", name: "Simi" }
       ],
       subject: "You're Registered for Menorah at the Falls!",
       htmlContent,
