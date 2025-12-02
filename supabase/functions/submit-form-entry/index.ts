@@ -21,12 +21,30 @@ interface SubmitEntryBody {
   verification_sent_at: string;
 }
 
-async function sendRegistrationEmail(fullName: string, email: string): Promise<void> {
+async function sendRegistrationEmail(
+  fullName: string,
+  email: string,
+  joinMenorahLighting: boolean,
+  joinChanukahParty: boolean,
+  numberOfParticipants: number
+): Promise<void> {
   try {
     const apiKey = Deno.env.get("BREVO_API_KEY");
     if (!apiKey) {
       throw new Error("Missing BREVO_API_KEY");
     }
+
+    // Build attending lines
+    const attendingLines: string[] = [];
+    if (joinMenorahLighting) {
+      attendingLines.push('Menorah lighting at Riverside Park');
+    }
+    if (joinChanukahParty) {
+      attendingLines.push('Chanukah Party at Chabad');
+    }
+    const attendingHtml = attendingLines.length > 0 
+      ? attendingLines.join('<br>') 
+      : 'Not specified';
 
     const htmlContent = `
 <p>Dear ${fullName},</p>
@@ -35,21 +53,24 @@ async function sendRegistrationEmail(fullName: string, email: string): Promise<v
 
 <p><strong>The event begins at Riverside Park.</strong> Enjoy a fire show and hot drinks at 5pm, followed by the Menorah lighting and a Gelt Drop from a fire truck at 5:30pm.</p>
 
-<p>To donate to this event and year-round Jewish programming, please visit <a href="https://jewishchagrinfalls.com/donate">jewishchagrinfalls.com/donate</a>.</p>
-
 <p><strong>After the lighting, the celebration continues up the street at Chabad at the Falls,</strong> 100 N Main Street, Suite 100. Join a Chanukah party with latkes, donuts, children's activities, and fun for the whole family.</p>
 
-<hr>
+<p>--</p>
 
 <p>You can also join us at the <strong>Triangle bandstand each night of Chanukah for a Menorah lighting ceremony,</strong> December 15 through December 21 at 7pm. Full schedule at <a href="https://jewishchagrinfalls.com/chanukah">jewishchagrinfalls.com/chanukah</a>.</p>
+
+<p><strong>Attending:</strong><br>
+${attendingHtml}
+<br>
+<strong>Number of participants:</strong> ${numberOfParticipants || 1}
+</p>
 `;
 
     const payload = {
       sender: { name: "Menorah at the Falls", email: "Rabbi@jewishchagrinfalls.com" },
       to: [{ email, name: fullName }],
       cc: [
-        { email: "Rabbi@jewishchagrinfalls.com", name: "Rabbi" },
-        { email: "simi@jewishchagrinfalls.com", name: "Simi" }
+        { email: "Rabbi@jewishchagrinfalls.com", name: "Rabbi" }
       ],
       subject: "You're Registered for Menorah at the Falls!",
       htmlContent,
@@ -134,7 +155,13 @@ serve(async (req) => {
     // Send registration confirmation email only for NON-donors
     // Donors will receive their combined email after payment success
     if (!body.wants_to_donate) {
-      sendRegistrationEmail(body.full_name, body.email).catch(err => {
+      sendRegistrationEmail(
+        body.full_name,
+        body.email,
+        body.join_menorah_lighting ?? false,
+        body.join_chanukah_party ?? false,
+        body.number_of_participants ?? 1
+      ).catch(err => {
         console.error("[submit-form-entry] Email sending failed but continuing:", err);
       });
     }
