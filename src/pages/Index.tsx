@@ -100,6 +100,22 @@ const Index = () => {
           {/* Event Highlights Section */}
           <div className="py-8 px-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
+              {/* Fire Show */}
+              <div className="flex flex-col items-center text-center">
+                <div className="relative mb-4">
+                  <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-amber-400/60 via-gold/40 to-amber-500/60 blur-md opacity-70" />
+                  <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full border-2 border-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.4)] overflow-hidden">
+                    <img src="/Fire-Show.jpg" alt="Fire Show" className="w-full h-full object-cover" />
+                  </div>
+                </div>
+                <h3 className="text-lg font-semibold text-gold drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] mb-1">
+                  Fire Show
+                </h3>
+                <p className="text-sm text-amber-100/80">
+                  A thrilling fire performance to kick off the night.
+                </p>
+              </div>
+              
               {/* Giant Menorah Lighting */}
               <div className="flex flex-col items-center text-center">
                 <div className="relative mb-4">
@@ -129,22 +145,6 @@ const Index = () => {
                 </h3>
                 <p className="text-sm text-amber-100/80">
                   Chanukah treats dropped from a real fire truck!
-                </p>
-              </div>
-              
-              {/* Fire Show */}
-              <div className="flex flex-col items-center text-center">
-                <div className="relative mb-4">
-                  <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-amber-400/60 via-gold/40 to-amber-500/60 blur-md opacity-70" />
-                  <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full border-2 border-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.4)] overflow-hidden">
-                    <img src="/Fire-Show.jpg" alt="Fire Show" className="w-full h-full object-cover" />
-                  </div>
-                </div>
-                <h3 className="text-lg font-semibold text-gold drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] mb-1">
-                  Fire Show
-                </h3>
-                <p className="text-sm text-amber-100/80">
-                  A thrilling fire performance to kick off the night.
                 </p>
               </div>
             </div>
