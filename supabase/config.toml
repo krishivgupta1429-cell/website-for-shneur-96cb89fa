@@ -1,1 +1,25 @@
 project_id = "aqhvsaehibtxxocrlfio"
+
+[functions.submit-form-entry]
+verify_jwt = false
+
+[functions.create-checkout-session]
+verify_jwt = false
+
+[functions.verify-payment]
+verify_jwt = false
+
+[functions.verify-email-token]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false
+
+[functions.retrieve-checkout-session]
+verify_jwt = false
+
+[functions.send-verification-email]
+verify_jwt = false
+
+[functions.send-test-email]
+verify_jwt = true

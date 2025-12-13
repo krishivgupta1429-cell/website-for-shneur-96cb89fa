@@ -1,24 +1,38 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-interface SubmitEntryBody {
-  full_name: string;
-  email: string;
-  phone_number?: string | null;
-  full_phone?: string | null;
-  number_of_participants?: number | null;
-  join_menorah_lighting: boolean;
-  join_chanukah_party: boolean;
-  sponsorships: string[];
-  other_donation?: number | null;
-  wants_to_donate?: boolean;
-  verification_token: string;
-  verification_sent_at: string;
+// Input validation schema
+const submitEntrySchema = z.object({
+  full_name: z.string().trim().min(1, "Name is required").max(100, "Name too long"),
+  email: z.string().trim().email("Invalid email").max(255, "Email too long").toLowerCase(),
+  phone_number: z.string().trim().max(30, "Phone too long").nullable().optional(),
+  full_phone: z.string().trim().max(50, "Phone too long").nullable().optional(),
+  number_of_participants: z.number().int().min(1).max(100).default(1),
+  join_menorah_lighting: z.boolean().default(false),
+  join_chanukah_party: z.boolean().default(false),
+  sponsorships: z.array(z.string().max(100)).max(10).default([]),
+  other_donation: z.number().min(0).max(100000).nullable().optional(),
+  wants_to_donate: z.boolean().default(false),
+  verification_token: z.string().min(1, "Token required").max(100),
+  verification_sent_at: z.string().min(1, "Timestamp required"),
+});
+
+// HTML escape function to prevent email injection
+function escapeHtml(text: string): string {
+  const htmlEntities: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  };
+  return text.replace(/[&<>"']/g, (char) => htmlEntities[char] || char);
 }
 
 async function sendRegistrationEmail(
@@ -33,6 +47,9 @@ async function sendRegistrationEmail(
       throw new Error("Missing BREVO_API_KEY");
     }
 
+    // Escape user inputs for HTML email
+    const safeFullName = escapeHtml(fullName);
+
     // Build attending lines - only Menorah lighting (Chanukah party is full)
     const attendingLines: string[] = [];
     if (joinMenorahLighting) {
@@ -43,7 +60,7 @@ async function sendRegistrationEmail(
       : 'Not specified';
 
     const htmlContent = `
-<p>Dear ${fullName},</p>
+<p>Dear ${safeFullName},</p>
 
 <p>Thank you for registering for <strong>Menorah at the Falls</strong>. See you on the first night of Chanukah, Sunday, December 14 at 5pm!</p>
 
@@ -60,13 +77,13 @@ async function sendRegistrationEmail(
 <p><strong>Attending:</strong><br>
 ${attendingHtml}
 <br><br>
-<strong>Number of participants:</strong> ${numberOfParticipants || 1}
+<strong>Number of participants:</strong> ${numberOfParticipants}
 </p>
 `;
 
     const payload = {
       sender: { name: "Menorah at the Falls", email: "Rabbi@jewishchagrinfalls.com" },
-      to: [{ email, name: fullName }],
+      to: [{ email, name: safeFullName }],
       cc: [
         { email: "Rabbi@jewishchagrinfalls.com", name: "Rabbi" },
         { email: "simi@jewishchagrinfalls.com", name: "Simi" }
@@ -111,27 +128,31 @@ serve(async (req) => {
       { auth: { persistSession: false } }
     );
 
-    const body = (await req.json()) as Partial<SubmitEntryBody>;
+    const rawBody = await req.json();
 
-    // Minimal validation of required fields
-    if (!body.full_name || !body.email || !body.verification_token || !body.verification_sent_at) {
+    // Validate input with Zod schema
+    const parseResult = submitEntrySchema.safeParse(rawBody);
+    if (!parseResult.success) {
+      console.error("[submit-form-entry] Validation error:", parseResult.error.flatten());
       return new Response(
-        JSON.stringify({ error: "Missing required fields" }),
+        JSON.stringify({ error: "Invalid input", details: parseResult.error.flatten().fieldErrors }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
       );
     }
 
-    // Prepare insert payload with new schema
+    const body = parseResult.data;
+
+    // Prepare insert payload with validated data
     const insertPayload = {
-      full_name: body.full_name.trim(),
-      email: body.email.trim().toLowerCase(),
-      phone_number: body.phone_number?.trim() ?? null,
-      full_phone: body.full_phone?.trim() ?? null,
-      number_of_participants: body.number_of_participants ?? 1,
-      join_menorah_lighting: body.join_menorah_lighting ?? false,
-      join_chanukah_party: body.join_chanukah_party ?? false,
-      sponsorships: body.sponsorships ?? [],
-      wants_to_donate: body.wants_to_donate ?? false,
+      full_name: body.full_name,
+      email: body.email,
+      phone_number: body.phone_number ?? null,
+      full_phone: body.full_phone ?? null,
+      number_of_participants: body.number_of_participants,
+      join_menorah_lighting: body.join_menorah_lighting,
+      join_chanukah_party: false, // Always false - party is full
+      sponsorships: body.sponsorships,
+      wants_to_donate: body.wants_to_donate,
       verification_token: body.verification_token,
       verification_sent_at: body.verification_sent_at,
       payment_status: body.wants_to_donate ? "pending" : "none",
@@ -157,8 +178,8 @@ serve(async (req) => {
       sendRegistrationEmail(
         body.full_name,
         body.email,
-        body.join_menorah_lighting ?? false,
-        body.number_of_participants ?? 1
+        body.join_menorah_lighting,
+        body.number_of_participants
       ).catch(err => {
         console.error("[submit-form-entry] Email sending failed but continuing:", err);
       });

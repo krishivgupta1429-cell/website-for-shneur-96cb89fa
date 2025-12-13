@@ -1,11 +1,28 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// UUID regex pattern
+const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+// Input validation schema
+const checkoutSchema = z.object({
+  formSubmissionId: z.string().regex(uuidRegex, "Invalid form submission ID"),
+  amount: z.number().positive("Amount must be positive").max(100000, "Amount exceeds maximum"),
+  email: z.string().trim().email("Invalid email").max(255),
+  fullName: z.string().trim().min(1).max(100),
+});
+
+// Sanitize string for Stripe metadata (remove special chars that could cause issues)
+function sanitizeForMetadata(text: string): string {
+  return text.replace(/[<>]/g, '').substring(0, 100);
+}
 
 // Helper logging function
 const logStep = (step: string, details?: any) => {
@@ -31,25 +48,21 @@ serve(async (req) => {
 
     logStep("Using LIVE mode Stripe key");
 
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
-    );
+    const rawBody = await req.json();
 
-    const { formSubmissionId, amount, email, fullName } = await req.json();
-
-    logStep("Request data", { formSubmissionId, amount, email, fullName });
-
-    if (!formSubmissionId || !amount || !email) {
-      logStep("ERROR: Missing required parameters");
-      throw new Error("Missing required parameters");
+    // Validate input with Zod schema
+    const parseResult = checkoutSchema.safeParse(rawBody);
+    if (!parseResult.success) {
+      logStep("ERROR: Validation failed", parseResult.error.flatten());
+      return new Response(
+        JSON.stringify({ error: "Invalid input", details: parseResult.error.flatten().fieldErrors }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
+      );
     }
 
-    // Validate amount is positive
-    if (amount <= 0) {
-      logStep("ERROR: Invalid amount", { amount });
-      throw new Error("Invalid amount");
-    }
+    const { formSubmissionId, amount, email, fullName } = parseResult.data;
+
+    logStep("Request data validated", { formSubmissionId, amount, email, fullName });
 
     // Initialize Stripe with live key
     const stripe = new Stripe(stripeKey, {
@@ -60,6 +73,9 @@ serve(async (req) => {
     const amountInCents = Math.round(amount * 100);
 
     logStep("Creating Stripe checkout session", { amountInCents });
+
+    // Sanitize fullName for metadata
+    const safeFullName = sanitizeForMetadata(fullName);
 
     // Create Stripe checkout session in LIVE mode
     const session = await stripe.checkout.sessions.create({
@@ -82,7 +98,7 @@ serve(async (req) => {
       customer_email: email,
       metadata: {
         form_submission_id: formSubmissionId,
-        full_name: fullName,
+        full_name: safeFullName,
       },
     });
 
