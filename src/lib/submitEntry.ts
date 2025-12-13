@@ -80,7 +80,7 @@ export async function submitEntry(
 
     // Convert joining locations to booleans
     const joinMenorahLighting = formData.joiningLocations.includes('riverside');
-    const joinChanukahParty = formData.joiningLocations.includes('chabad');
+    // Note: join_chanukah_party is no longer used - Chanukah party is full
 
     // Map selected donation IDs to their labels for storage
     const donationOptions = [
@@ -109,7 +109,7 @@ export async function submitEntry(
       full_phone: phoneNumber,
       number_of_participants: parseInt(formData.numberOfParticipants, 10) || 1,
       join_menorah_lighting: joinMenorahLighting,
-      join_chanukah_party: joinChanukahParty,
+      join_chanukah_party: false, // No longer used - Chanukah party is full
       sponsorships: sponsorshipLabels,
       other_donation: otherDonationAmount > 0 ? otherDonationAmount : null,
       wants_to_donate: wantsToDonate,

@@ -347,7 +347,7 @@ const RaffleForm = () => {
           <Label className="text-foreground font-medium text-base">
             Where will you be joining? <span className="text-gold">*</span>
           </Label>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
+          <div className="grid grid-cols-1 gap-2 md:gap-3">
             {/* Menorah Lighting Checkbox */}
             <Label 
               htmlFor="location-riverside" 
@@ -375,37 +375,9 @@ const RaffleForm = () => {
                 Menorah lighting at Riverside Park
               </span>
             </Label>
-            
-            {/* Chanukah Party Checkbox */}
-            <Label 
-              htmlFor="location-chabad" 
-              className={`flex items-center gap-3 md:gap-3 min-h-[56px] md:min-h-[56px] group px-3 py-3 md:px-3 md:py-3 rounded-2xl md:rounded-lg border transition-all duration-200 cursor-pointer ${
-                formData.joiningLocations.includes('chabad') 
-                  ? 'border-gold bg-gold/10' 
-                  : 'border-gold/30 hover:border-gold/60 hover:bg-gold/5'
-              }`}
-            >
-              <Checkbox
-                id="location-chabad"
-                checked={formData.joiningLocations.includes('chabad')}
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setFormData({ ...formData, joiningLocations: [...formData.joiningLocations, 'chabad'] });
-                  } else {
-                    setFormData({ ...formData, joiningLocations: formData.joiningLocations.filter(l => l !== 'chabad') });
-                  }
-                }}
-                className="border-gold/60 data-[state=checked]:bg-gold data-[state=checked]:border-gold ring-offset-background focus-visible:ring-2 focus-visible:ring-gold/40"
-              />
-              <span className={`text-sm md:text-base font-medium transition-colors duration-200 leading-snug ${
-                formData.joiningLocations.includes('chabad') ? 'text-gold' : 'text-foreground/90 group-hover:text-gold'
-              }`}>
-                Chanukah Party at Chabad at the Falls
-              </span>
-            </Label>
           </div>
           <p className="text-sm text-foreground/60 mt-2">
-            Select one or both. Party follows immediately after lighting.
+            All are welcome to attend the Menorah lighting at Riverside Park. The Chanukah party at Chabad is full.
           </p>
         </div>
 

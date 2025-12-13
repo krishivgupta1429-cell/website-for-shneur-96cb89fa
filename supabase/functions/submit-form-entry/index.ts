@@ -25,7 +25,6 @@ async function sendRegistrationEmail(
   fullName: string,
   email: string,
   joinMenorahLighting: boolean,
-  joinChanukahParty: boolean,
   numberOfParticipants: number
 ): Promise<void> {
   try {
@@ -34,13 +33,10 @@ async function sendRegistrationEmail(
       throw new Error("Missing BREVO_API_KEY");
     }
 
-    // Build attending lines
+    // Build attending lines - only Menorah lighting (Chanukah party is full)
     const attendingLines: string[] = [];
     if (joinMenorahLighting) {
       attendingLines.push('Menorah lighting at Riverside Park');
-    }
-    if (joinChanukahParty) {
-      attendingLines.push('Chanukah Party at Chabad');
     }
     const attendingHtml = attendingLines.length > 0 
       ? attendingLines.join('<br>') 
@@ -162,7 +158,6 @@ serve(async (req) => {
         body.full_name,
         body.email,
         body.join_menorah_lighting ?? false,
-        body.join_chanukah_party ?? false,
         body.number_of_participants ?? 1
       ).catch(err => {
         console.error("[submit-form-entry] Email sending failed but continuing:", err);

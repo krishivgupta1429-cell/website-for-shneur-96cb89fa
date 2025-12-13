@@ -34,7 +34,6 @@ async function sendDonorConfirmationEmail(
     donationDate: string;
     transactionId: string;
     joinMenorahLighting: boolean;
-    joinChanukahParty: boolean;
     numberOfParticipants: number;
   }
 ): Promise<void> {
@@ -56,13 +55,10 @@ async function sendDonorConfirmationEmail(
       ? donationData.sponsorships.join(", ")
       : "General Donation";
 
-    // Build attending lines
+    // Build attending lines - only Menorah lighting (Chanukah party is full)
     const attendingLines: string[] = [];
     if (donationData.joinMenorahLighting) {
       attendingLines.push('Menorah lighting at Riverside Park');
-    }
-    if (donationData.joinChanukahParty) {
-      attendingLines.push('Chanukah Party at Chabad');
     }
     const attendingHtml = attendingLines.length > 0 
       ? attendingLines.join('<br>') 
@@ -181,7 +177,7 @@ serve(async (req) => {
     // Find the form submission by checkout session ID
     const { data: submission, error: findError } = await supabaseAdmin
       .from("form_submissions")
-      .select("id, wants_to_donate, payment_status, full_name, email, sponsorships, created_at, join_menorah_lighting, join_chanukah_party, number_of_participants")
+      .select("id, wants_to_donate, payment_status, full_name, email, sponsorships, created_at, join_menorah_lighting, number_of_participants")
       .eq("stripe_checkout_session_id", session_id)
       .maybeSingle();
 
@@ -294,7 +290,6 @@ serve(async (req) => {
           donationDate: submission.created_at,
           transactionId: paymentIntentId || session_id,
           joinMenorahLighting: submission.join_menorah_lighting ?? false,
-          joinChanukahParty: submission.join_chanukah_party ?? false,
           numberOfParticipants: submission.number_of_participants ?? 1,
         }
       ).catch(err => {
