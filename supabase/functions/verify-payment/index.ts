@@ -73,7 +73,7 @@ async function sendDonorConfirmationEmail(
 
 <p>To donate to this event and year-round Jewish programming, please visit <a href="https://jewishchagrinfalls.com/donate">jewishchagrinfalls.com/donate</a>.</p>
 
-<p><strong>After the lighting, the celebration continues up the street at Chabad at the Falls,</strong> 100 N Main Street, Suite 100. Join a Chanukah party with latkes, donuts, children's activities, and fun for the whole family.</p>
+<p>All are welcome to attend the Menorah lighting at Riverside Park. The Chanukah party at Chabad is full.</p>
 
 <p>--</p>
 
