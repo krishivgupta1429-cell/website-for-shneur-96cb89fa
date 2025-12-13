@@ -157,6 +157,9 @@ const Index = () => {
               <h2 className="text-xl md:text-2xl font-semibold text-gold drop-shadow-[0_0_15px_rgba(255,215,0,0.4)]">
                 ✨ Event Schedule ✨
               </h2>
+              <p className="text-sm md:text-base font-medium text-amber-100/80 mt-3 mb-2">
+                All are welcome to attend the Menorah lighting at Riverside Park. The Chanukah party at Chabad is full.
+              </p>
             </div>
             
             {/* Two Column Layout */}
