@@ -24,6 +24,18 @@ function formatDateET(dateString: string): string {
   });
 }
 
+// HTML escape function to prevent email injection
+function escapeHtml(text: string): string {
+  const htmlEntities: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  };
+  return text.replace(/[&<>"']/g, (char) => htmlEntities[char] || char);
+}
+
 // Send combined confirmation + donation receipt email via Brevo API
 async function sendDonorConfirmationEmail(
   fullName: string,
@@ -43,6 +55,9 @@ async function sendDonorConfirmationEmail(
       throw new Error("Missing BREVO_API_KEY");
     }
 
+    // Escape user inputs for HTML email
+    const safeFullName = escapeHtml(fullName);
+
     // Format amount from cents to dollars
     const amountDollars = donationData.amountCents / 100;
     const formattedAmount = `$${amountDollars.toFixed(2)}`;
@@ -50,9 +65,9 @@ async function sendDonorConfirmationEmail(
     // Format donation date in ET
     const formattedDate = formatDateET(donationData.donationDate);
 
-    // Format sponsorships as comma-separated string
+    // Format sponsorships as comma-separated string (escape each)
     const sponsorshipsText = donationData.sponsorships && donationData.sponsorships.length > 0
-      ? donationData.sponsorships.join(", ")
+      ? donationData.sponsorships.map(s => escapeHtml(s)).join(", ")
       : "General Donation";
 
     // Build attending lines - only Menorah lighting (Chanukah party is full)
@@ -65,7 +80,7 @@ async function sendDonorConfirmationEmail(
       : 'Not specified';
 
     const htmlContent = `
-<p>Dear ${fullName},</p>
+<p>Dear ${safeFullName},</p>
 
 <p>Thank you for registering for <strong>Menorah at the Falls</strong>. See you on the first night of Chanukah, Sunday, December 14 at 5pm!</p>
 
@@ -86,20 +101,20 @@ async function sendDonorConfirmationEmail(
 <p><strong>Donation Details</strong><br>
 • ${formattedAmount} — ${sponsorshipsText}<br>
 • Date: ${formattedDate}<br>
-• Reference: ${donationData.transactionId}</p>
+• Reference: ${escapeHtml(donationData.transactionId)}</p>
 
 <p>Your partnership makes a heartfelt difference. Thank you for helping illuminate our community with kindness.</p>
 
 <p><strong>Attending:</strong><br>
 ${attendingHtml}
 <br><br>
-<strong>Number of participants:</strong> ${donationData.numberOfParticipants || 1}
+<strong>Number of participants:</strong> ${donationData.numberOfParticipants}
 </p>
 `;
 
     const payload = {
       sender: { name: "Menorah at the Falls", email: "Rabbi@jewishchagrinfalls.com" },
-      to: [{ email, name: fullName }],
+      to: [{ email, name: safeFullName }],
       cc: [
         { email: "Rabbi@jewishchagrinfalls.com", name: "Rabbi" },
         { email: "simi@jewishchagrinfalls.com", name: "Simi" }
@@ -141,9 +156,9 @@ serve(async (req) => {
 
     logStep("Starting payment verification", { sessionId: session_id });
 
-    if (!session_id) {
-      logStep("ERROR: Missing session_id parameter");
-      throw new Error("Missing session_id parameter");
+    if (!session_id || typeof session_id !== 'string' || session_id.length > 200) {
+      logStep("ERROR: Invalid session_id parameter");
+      throw new Error("Invalid session_id parameter");
     }
 
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
