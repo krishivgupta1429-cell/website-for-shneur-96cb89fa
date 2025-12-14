@@ -161,11 +161,7 @@ const RaffleForm = () => {
       return;
     }
 
-    // Validate joining locations
-    if (formData.joiningLocations.length === 0) {
-      toast.error("Please select at least one location you'll be joining");
-      return;
-    }
+    // joiningLocations is now optional - no validation needed
 
     // Set submitting state
     setIsSubmitting(true);
@@ -345,7 +341,7 @@ const RaffleForm = () => {
         {/* Where Will You Be Joining */}
         <div className="space-y-3">
           <Label className="text-foreground font-medium text-base">
-            Where will you be joining? <span className="text-gold">*</span>
+            Where will you be joining?
           </Label>
           <div className="grid grid-cols-1 gap-2 md:gap-3">
             {/* Menorah Lighting Checkbox */}
