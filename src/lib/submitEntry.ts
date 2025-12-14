@@ -60,12 +60,7 @@ export async function submitEntry(
       };
     }
 
-    if (!formData.joiningLocations || formData.joiningLocations.length === 0) {
-      return {
-        success: false,
-        error: "Please select at least one location you'll be joining",
-      };
-    }
+    // joiningLocations is now optional - no validation needed
 
     // Parse other donation amount
     const otherDonationAmount = parseFloat(formData.otherDonation) || 0;
